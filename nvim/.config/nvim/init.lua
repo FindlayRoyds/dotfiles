@@ -26,10 +26,6 @@ vim.keymap.set('n', '<leader>h', '<C-w>h', { desc = 'Move to left split' })
 vim.keymap.set('n', '<leader>j', '<C-w>j', { desc = 'Move to bottom split' })
 vim.keymap.set('n', '<leader>k', '<C-w>k', { desc = 'Move to top split' })
 vim.keymap.set('n', '<leader>l', '<C-w>l', { desc = 'Move to right split' })
-vim.keymap.set('t', '<leader>h', [[<C-\><C-n><C-w>h]], { desc = 'Move to left split from terminal' })
-vim.keymap.set('t', '<leader>j', [[<C-\><C-n><C-w>j]], { desc = 'Move to bottom split from terminal' })
-vim.keymap.set('t', '<leader>k', [[<C-\><C-n><C-w>k]], { desc = 'Move to top split from terminal' })
-vim.keymap.set('t', '<leader>l', [[<C-\><C-n><C-w>l]], { desc = 'Move to right split from terminal' })
 
 vim.keymap.set("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "LSP Definition (Snacks)" })
 
@@ -37,6 +33,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
     group = vim.api.nvim_create_augroup('custom-terminal-config', { clear = true }),
     callback = function()
         vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { buffer = 0, desc = 'Exit terminal mode' })
+        vim.keymap.set('t', '<Space>', '<Space>', { buffer = 0 }) -- Force Space to be sent immediately in Terminal mode
     end,
 })
 
@@ -164,7 +161,28 @@ require("lazy").setup({
                 autostart = true,
             })
         end,
-    }
+    },
+    {
+        "nvim-treesitter/nvim-treesitter",
+        build = ":TSUpdate",
+        config = function()
+            -- We wrap this in a protected call or ensure it only runs when loaded
+            local status, ts = pcall(require, "nvim-treesitter.configs")
+            if not status then return end
+            
+            ts.setup({
+                -- Add 'vim' and 'vimdoc' so your config files look good too
+                ensure_installed = { "python", "lua", "vim", "vimdoc" },
+                sync_install = false,
+                highlight = {
+                    enable = true,
+                    additional_vim_regex_highlighting = false,
+                },
+                -- Enable better indentation based on the tree-sitter tree
+                indent = { enable = true },
+            })
+        end,
+    },
 }, {
     -- lazy.nvim UI
     -- ui = { border = "rounded" },
