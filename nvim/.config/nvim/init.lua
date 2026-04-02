@@ -1,6 +1,3 @@
-    -- VARIABLES
-local theme = "default"
-
     -- GENERAL SETTINGS
 vim.g.mapleader = " " -- Leader key for shortcuts
 vim.opt.termguicolors = true
@@ -37,6 +34,10 @@ vim.api.nvim_create_autocmd('TermOpen', {
     end,
 })
 
+vim.keymap.set("n", "<leader>s", function()
+  vim.lsp.buf.format({ async = true })
+end, { desc = "Format current buffer" })
+
 -- tabs
 -- vim.opt.tabstop = 4 -- Visual width of a tab
 vim.opt.softtabstop = 4
@@ -71,6 +72,27 @@ vim.opt.rtp:prepend(lazypath)
 
     -- CONFIGURE PLUGINS
 require("lazy").setup({
+    {
+        "erl-koenig/theme-hub.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        config = function()
+        require("theme-hub").setup({
+          auto_install_on_select = true,
+        })
+        end,
+    },
+    {
+        "folke/tokyonight.nvim",
+        lazy = false,
+        priority = 1000,
+        opts = {
+            style = "night",
+        },
+        config = function(_, opts)
+            require("tokyonight").setup(opts)
+            vim.cmd([[colorscheme tokyonight]])
+        end,
+    },
     {
         "kylechui/nvim-surround",
         version = "*",
@@ -135,7 +157,7 @@ require("lazy").setup({
             },
         },
         keys = {
-            { "<leader>f", function() Snacks.picker.files() end, desc = "Smart find (files + recent)" },
+            { "<leader>f", function() Snacks.picker.smart() end, desc = "Smart find (files + recent)" },
             { "<leader>p", function() Snacks.picker() end, desc = "All pickers" },
         },
     },
@@ -148,15 +170,16 @@ require("lazy").setup({
         config = function()
             require("mason").setup()
             require("mason-lspconfig").setup({
-                ensure_installed = { "ruff", "ty" }, -- Only these are downloaded
+                ensure_installed = { "ruff", "ty" },
             })
 
             vim.lsp.enable("ty") 
+            vim.lsp.enable("ruff") 
+
             vim.lsp.config("ty", {
                 autostart = true,
                 capabilities = { offsetEncoding = { "utf-16" } }
             })
-            vim.lsp.enable("ruff") 
             vim.lsp.config("ruff", {
                 autostart = true,
             })
@@ -165,29 +188,17 @@ require("lazy").setup({
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
-        config = function()
-            -- We wrap this in a protected call or ensure it only runs when loaded
-            local status, ts = pcall(require, "nvim-treesitter.configs")
-            if not status then return end
-            
-            ts.setup({
-                -- Add 'vim' and 'vimdoc' so your config files look good too
-                ensure_installed = { "python", "lua", "vim", "vimdoc" },
-                sync_install = false,
-                highlight = {
-                    enable = true,
-                    additional_vim_regex_highlighting = false,
-                },
-                -- Enable better indentation based on the tree-sitter tree
-                indent = { enable = true },
-            })
-        end,
+        opts = {
+            auto_install = true,
+
+            highlight = {
+                enable = true,
+                additional_vim_regex_highlighting = false,
+            },
+
+            indent = { enable = true },
+        },
     },
 }, {
-    -- lazy.nvim UI
-    -- ui = { border = "rounded" },
     install = { colorscheme = { theme } },
 })
-
-vim.cmd.colorscheme(theme)
-
