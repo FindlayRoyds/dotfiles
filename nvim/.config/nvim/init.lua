@@ -19,10 +19,15 @@ vim.opt.splitbelow = true -- Open horizontal splits below
 vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
 
-vim.keymap.set('n', '<leader>h', '<C-w>h', { desc = 'Move to left split' })
-vim.keymap.set('n', '<leader>j', '<C-w>j', { desc = 'Move to bottom split' })
-vim.keymap.set('n', '<leader>k', '<C-w>k', { desc = 'Move to top split' })
-vim.keymap.set('n', '<leader>l', '<C-w>l', { desc = 'Move to right split' })
+vim.keymap.set('n', '<leader>h', '<C-w>h')
+vim.keymap.set('n', '<leader>j', '<C-w>j')
+vim.keymap.set('n', '<leader>k', '<C-w>k')
+vim.keymap.set('n', '<leader>l', '<C-w>l')
+
+vim.keymap.set('n', '<leader>H', '<C-w>H')
+vim.keymap.set('n', '<leader>J', '<C-w>J')
+vim.keymap.set('n', '<leader>K', '<C-w>K')
+vim.keymap.set('n', '<leader>L', '<C-w>L')
 
 vim.keymap.set("n", "gd", function() Snacks.picker.lsp_definitions() end, { desc = "LSP Definition (Snacks)" })
 
