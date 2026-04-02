@@ -82,15 +82,16 @@ require("lazy").setup({
         end,
     },
     {
-        "folke/tokyonight.nvim",
+        "catppuccin/nvim",
+        name = "catppuccin",
         lazy = false,
         priority = 1000,
         opts = {
-            style = "night",
+            flavour = "mocha", -- options: latte, frappe, macchiato, mocha
         },
         config = function(_, opts)
-            require("tokyonight").setup(opts)
-            vim.cmd([[colorscheme tokyonight]])
+            require("catppuccin").setup(opts)
+            vim.cmd.colorscheme "catppuccin"
         end,
     },
     {
