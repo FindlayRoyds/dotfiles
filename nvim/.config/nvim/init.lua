@@ -12,6 +12,12 @@ vim.opt.scrolloff = 8 -- Vertical padding
 vim.opt.sidescrolloff = 8 -- Horizontal padding
 vim.opt.splitright = true -- Open vertical splits to the right
 vim.opt.splitbelow = true -- Open horizontal splits below
+vim.opt.signcolumn = "yes" -- Show diagnostics in line numbers
+vim.diagnostic.config({
+  severity_sort = true, -- Prioritise showing E>W>H diagnostics
+})
+vim.opt.cursorline = true -- Highlight current line number
+vim.opt.cursorlineopt = "number" -- Don't highlight entire line only number
 
     -- KEYBINDS
 vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
@@ -42,7 +48,6 @@ vim.keymap.set("n", "<leader>s", function()
 end, { desc = "Format current buffer" })
 
 -- tabs
--- vim.opt.tabstop = 4 -- Visual width of a tab
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
@@ -63,7 +68,7 @@ vim.opt.relativenumber = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true -- Uses case when typing capital letter
 
-    -- INSTALL LAZY.NVIM
+    -- LAZY.NVIM PLUGINS
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
@@ -73,8 +78,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-    -- CONFIGURE PLUGINS
 require("lazy").setup({
+    {
+        "lewis6991/gitsigns.nvim",
+        -- event = "VeryLazy",
+    },
     {
         "erl-koenig/theme-hub.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
@@ -114,9 +122,6 @@ require("lazy").setup({
                 direction = "float",
                 start_in_insert = true,
                 persist_size = true,
-                -- float_opts = {
-                --     border = "curved",
-                -- },
             })
         end
     },
