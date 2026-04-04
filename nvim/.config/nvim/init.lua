@@ -12,8 +12,6 @@ vim.opt.scrolloff = 8 -- Vertical padding
 vim.opt.sidescrolloff = 8 -- Horizontal padding
 vim.opt.splitright = true -- Open vertical splits to the right
 vim.opt.splitbelow = true -- Open horizontal splits below
--- vim.g.lsp_auto_enable = false       -- Disable Neovim 0.11 native auto-start
--- vim.g.lspconfig_auto_attach = false -- Disable nvim-lspconfig auto-attach logic
 
     -- KEYBINDS
 vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
@@ -163,9 +161,14 @@ require("lazy").setup({
             },
         },
         keys = {
-            { "<leader>f", function() Snacks.picker.smart() end, desc = "Smart find (files + recent)" },
+            { "<leader>f", function() Snacks.picker.smart({ filter = { cwd = true } }) end, desc = "Smart find (files + recent)" },
             { "<leader>p", function() Snacks.picker() end, desc = "All pickers" },
         },
+    },
+    {
+        'mrcjkb/rustaceanvim',
+        version = '^8',
+        lazy = false,
     },
     {
         "neovim/nvim-lspconfig",
