@@ -18,6 +18,8 @@ vim.diagnostic.config({
 })
 vim.opt.cursorline = true -- Highlight current line number
 vim.opt.cursorlineopt = "number" -- Don't highlight entire line only number
+vim.opt.shortmess:append("I") -- Hide slpash screen stuff
+vim.opt.wrap = false -- Stop lines wrapping
 
     -- KEYBINDS
 vim.keymap.set('n', '<leader>t', '<cmd>ToggleTerm<cr>', { desc = 'Toggle terminal' })
