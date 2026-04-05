@@ -122,6 +122,11 @@ require("lazy").setup({
                 direction = "float",
                 start_in_insert = true,
                 persist_size = true,
+                on_open = function(term) -- Put terminal in insert every time it's opened
+                    vim.schedule(function()
+                        vim.cmd("startinsert!")
+                    end)
+                end,
             })
         end
     },
