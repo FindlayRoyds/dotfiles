@@ -80,8 +80,14 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
     {
+       "m4xshen/hardtime.nvim",
+       lazy = false,
+       dependencies = { "MunifTanjim/nui.nvim" },
+       opts = {},
+    },
+    {
         "lewis6991/gitsigns.nvim",
-        -- event = "VeryLazy",
+        event = "VeryLazy",
     },
     {
         "erl-koenig/theme-hub.nvim",
