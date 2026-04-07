@@ -51,11 +51,6 @@ vim.keymap.set("n", "<leader>s", function()
 	vim.lsp.buf.format({ async = true })
 end, { desc = "Format current buffer" })
 
--- tabs
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
-
 -- Don't continue comments onto newlines
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "*",
