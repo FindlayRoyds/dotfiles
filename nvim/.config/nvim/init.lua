@@ -141,10 +141,10 @@ require("lazy").setup({
 	},
 	{
 		"okuuva/auto-save.nvim",
-		event = { "TextChanged" },
+		event = { "TextChanged", "InsertChange", "BufLeave" },
 		opts = {
 			enabled = true,
-			debounce_delay = 500,
+			debounce_delay = 135,
 			condition = function(buf)
 				local fn = vim.fn
 				local utils = require("auto-save.utils.data")
