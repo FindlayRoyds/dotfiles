@@ -71,12 +71,12 @@ vim.opt.smartcase = true -- Uses case when typing capital letter
 vim.opt.autoread = true
 -- Trigger checktime when focusing Neovim or entering a buffer
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
-  pattern = "*",
-  callback = function()
-    if vim.fn.getcmdwintype() == "" then
-      vim.cmd("checktime")
-    end
-  end,
+	pattern = "*",
+	callback = function()
+		if vim.fn.getcmdwintype() == "" then
+			vim.cmd("checktime")
+		end
+	end,
 })
 
 -- LAZY.NVIM PLUGINS
@@ -94,6 +94,16 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+	{
+		"saghen/blink.cmp",
+		version = "1.*",
+		opts = {
+			keymap = { preset = "super-tab" },
+			completion = {
+				list = { max_items = 4 },
+			},
+		},
+	},
 	{ "NMAC427/guess-indent.nvim", opts = {} },
 	{
 		"m4xshen/hardtime.nvim",
