@@ -8,11 +8,11 @@ vim.opt.ruler = false -- Hide cursor position readout bottom right
 vim.opt.cmdheight = 0 -- Hide command bar when not in use
 vim.opt.showmode = false -- Hide --INSERT-- readout
 vim.opt.undofile = true -- Persistent undo history
-vim.opt.scrolloff = 8 -- Vertical padding
-vim.opt.sidescrolloff = 8 -- Horizontal padding
+vim.opt.scrolloff = 10 -- Vertical padding
+vim.opt.sidescrolloff = 12 -- Horizontal padding
 vim.opt.splitright = true -- Open vertical splits to the right
 vim.opt.splitbelow = true -- Open horizontal splits below
-vim.opt.signcolumn = "yes" -- Show diagnostics in line numbers
+vim.opt.signcolumn = "yes" -- Show diagnostics to left of line numbers, always have space
 vim.diagnostic.config({
 	severity_sort = true, -- Prioritise showing E>W>H diagnostics
 })
@@ -66,6 +66,18 @@ vim.opt.relativenumber = true
 -- Ignore case when searching
 vim.opt.ignorecase = true
 vim.opt.smartcase = true -- Uses case when typing capital letter
+
+-- Enable global autoread to update buffer to match file
+vim.opt.autoread = true
+-- Trigger checktime when focusing Neovim or entering a buffer
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+  pattern = "*",
+  callback = function()
+    if vim.fn.getcmdwintype() == "" then
+      vim.cmd("checktime")
+    end
+  end,
+})
 
 -- LAZY.NVIM PLUGINS
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -142,10 +154,9 @@ require("lazy").setup({
 	},
 	{
 		"okuuva/auto-save.nvim",
-		event = { "TextChanged", "InsertChange", "BufLeave" },
 		opts = {
 			enabled = true,
-			debounce_delay = 135,
+			debounce_delay = 200,
 			condition = function(buf)
 				local fn = vim.fn
 				local utils = require("auto-save.utils.data")
