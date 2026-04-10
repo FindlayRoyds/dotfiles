@@ -198,6 +198,7 @@ require("lazy").setup({
         },
       },
       scroll = {},
+      notifier = {},
     },
     keys = {
       {
