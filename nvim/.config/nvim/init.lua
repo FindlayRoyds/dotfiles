@@ -211,7 +211,9 @@ require("lazy").setup({
         },
       },
       scroll = {},
-      notifier = {},
+      notifier = {
+        timeout = 5000,
+      },
     },
     keys = {
       {
