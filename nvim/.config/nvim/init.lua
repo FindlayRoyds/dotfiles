@@ -191,18 +191,13 @@ require("lazy").setup({
 		"folke/snacks.nvim",
 		opts = {
 			picker = {
-				enabled = true,
 				formatters = {
 					file = {
 						filename_first = true,
 					},
 				},
-				matcher = {
-					cwd_bonus = true,
-					frecency = true,
-					history_bonus = true,
-				},
 			},
+			scroll = { },
 		},
 		keys = {
 			{
@@ -218,6 +213,13 @@ require("lazy").setup({
 					Snacks.picker()
 				end,
 				desc = "All pickers",
+			},
+			{
+				"<leader>o",
+				function()
+					Snacks.picker.zoxide()
+				end,
+				desc = "Zoxide picker, change working directory",
 			},
 		},
 	},
