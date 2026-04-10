@@ -21,6 +21,34 @@ vim.opt.cursorlineopt = "number" -- Don't highlight entire line only number
 vim.opt.shortmess:append("I") -- Hide slpash screen stuff
 vim.opt.wrap = false -- Stop lines wrapping
 
+-- Don't continue comments onto newlines
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "*",
+	callback = function()
+		vim.opt_local.formatoptions:remove({ "c", "r", "o" })
+	end,
+})
+
+-- Relative line numbers
+vim.opt.number = true
+vim.opt.relativenumber = true
+
+-- Ignore case when searching
+vim.opt.ignorecase = true
+vim.opt.smartcase = true -- Uses case when typing capital letter
+
+-- Enable global autoread to update buffer to match file
+vim.opt.autoread = true
+-- Trigger checktime when focusing Neovim or entering a buffer
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+	pattern = "*",
+	callback = function()
+		if vim.fn.getcmdwintype() == "" then
+			vim.cmd("checktime")
+		end
+	end,
+})
+
 -- KEYBINDS
 vim.keymap.set("n", "<leader>t", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
@@ -50,34 +78,6 @@ vim.api.nvim_create_autocmd("TermOpen", {
 vim.keymap.set("n", "<leader>s", function()
 	vim.lsp.buf.format({ async = true })
 end, { desc = "Format current buffer" })
-
--- Don't continue comments onto newlines
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "*",
-	callback = function()
-		vim.opt_local.formatoptions:remove({ "c", "r", "o" })
-	end,
-})
-
--- Relative line numbers
-vim.opt.number = true
-vim.opt.relativenumber = true
-
--- Ignore case when searching
-vim.opt.ignorecase = true
-vim.opt.smartcase = true -- Uses case when typing capital letter
-
--- Enable global autoread to update buffer to match file
-vim.opt.autoread = true
--- Trigger checktime when focusing Neovim or entering a buffer
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
-	pattern = "*",
-	callback = function()
-		if vim.fn.getcmdwintype() == "" then
-			vim.cmd("checktime")
-		end
-	end,
-})
 
 -- LAZY.NVIM PLUGINS
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
