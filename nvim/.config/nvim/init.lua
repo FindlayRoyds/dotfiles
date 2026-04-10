@@ -16,8 +16,6 @@ vim.opt.signcolumn = "yes" -- Show diagnostics to left of line numbers, always h
 vim.diagnostic.config {
   severity_sort = true, -- Prioritise showing E>W>H diagnostics
 }
-vim.opt.cursorline = true -- Highlight current line number
-vim.opt.cursorlineopt = "number" -- Don't highlight entire line only number
 vim.opt.shortmess:append "I" -- Hide slpash screen stuff
 vim.opt.wrap = false -- Stop lines wrapping
 
@@ -46,6 +44,21 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
     if vim.fn.getcmdwintype() == "" then
       vim.cmd "checktime"
     end
+  end,
+})
+
+-- Highlight line and line number of active window
+local cursorline_group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
+vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
+  group = cursorline_group,
+  callback = function()
+    vim.opt_local.cursorline = true
+  end,
+})
+vim.api.nvim_create_autocmd({ "WinLeave" }, {
+  group = cursorline_group,
+  callback = function()
+    vim.opt_local.cursorline = false
   end,
 })
 
