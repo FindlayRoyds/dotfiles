@@ -179,12 +179,17 @@ require("lazy").setup({
     "okuuva/auto-save.nvim",
     opts = {
       enabled = true,
-      debounce_delay = 200,
       condition = function(buf)
         local fn = vim.fn
         local utils = require "auto-save.utils.data"
+        local buf_name = vim.api.nvim_buf_get_name(buf)
 
-        -- Don't save for gitcommit, gitrebase, or non-modifiable files
+        -- Don't autosave unnamed buffers (e.g., pickers)
+        if buf_name ~= "" and fn.filereadable(buf_name) == 0 then
+          Snacks.notify.warn("File missing: auto-save aborted", { title = "Auto-save" })
+          return false
+        end
+
         if
           fn.getbufvar(buf, "&modifiable") == 1
           and utils.not_in(fn.getbufvar(buf, "&filetype"), { "gitcommit", "gitrebase" })
