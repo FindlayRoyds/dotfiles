@@ -175,6 +175,21 @@ require("toggleterm").setup({
         end)
     end,
 })
+-- Change dir when vim cwd changes
+vim.api.nvim_create_autocmd("DirChanged", {
+    callback = function()
+        local new_dir = vim.fn.getcwd()
+
+        local status_ok, toggleterm = pcall(require, "toggleterm.terminal")
+        if status_ok then
+            for _, term in pairs(toggleterm.get_all()) do
+                -- if term:is_open() then
+                term:send("cd " .. new_dir)
+                -- end
+            end
+        end
+    end,
+})
 
 require("auto-save").setup({
     enabled = true,
