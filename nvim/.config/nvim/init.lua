@@ -179,18 +179,6 @@ require("toggleterm").setup({
         end)
     end,
 })
--- Change dir when vim cwd changes
-vim.api.nvim_create_autocmd("DirChanged", {
-    callback = function()
-        local new_dir = vim.fn.getcwd()
-        local status_ok, toggleterm = pcall(require, "toggleterm.terminal")
-        if status_ok then
-            for _, term in pairs(toggleterm.get_all()) do
-                term:send("cd " .. new_dir)
-            end
-        end
-    end,
-})
 
 require("snacks").setup({
     picker = { formatters = { file = { filename_first = true } } },
