@@ -188,19 +188,19 @@ require("snacks").setup({
 })
 vim.keymap.set("n", "<leader>f", function()
     Snacks.picker.smart({ filter = { cwd = true } })
-end
+end)
 vim.keymap.set("n", "<leader>p", function()
     Snacks.picker()
-end
+end)
 vim.keymap.set("n", "<leader>o", function()
     Snacks.picker.zoxide()
-end
+end)
 vim.keymap.set("n", "gd", function()
     Snacks.picker.lsp_definitions()
-end
-vim.keymap.set('n', 'grr', function()
-  Snacks.picker.lsp_references()
-end
+end)
+vim.keymap.set("n", "grr", function()
+    Snacks.picker.lsp_references()
+end)
 
 require("auto-save").setup({
     enabled = true,
