@@ -1,4 +1,7 @@
+-- =====================================================================
 -- GENERAL SETTINGS
+-- =====================================================================
+
 vim.g.mapleader = " " -- Leader key for shortcuts
 vim.opt.termguicolors = true
 vim.opt.clipboard = "unnamedplus" -- Share yank register with system clipboard
@@ -62,7 +65,10 @@ vim.api.nvim_create_autocmd({ "WinLeave" }, {
     end,
 })
 
+-- =====================================================================
 -- KEYBINDS
+-- =====================================================================
+
 vim.keymap.set("n", "<leader>t", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
 
@@ -92,205 +98,138 @@ vim.keymap.set("n", "<leader>s", function()
     vim.lsp.buf.format({ async = true })
 end, { desc = "Format current buffer" })
 
--- LAZY.NVIM PLUGINS
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-    vim.fn.system({
-        "git",
-        "clone",
-        "--filter=blob:none",
-        "https://github.com/folke/lazy.nvim.git",
-        "--branch=stable",
-        lazypath,
-    })
-end
-vim.opt.rtp:prepend(lazypath)
+-- =====================================================================
+-- PACKAGE MANAGEMENT
+-- =====================================================================
 
-require("lazy").setup({
-    {
-        "saghen/blink.cmp",
-        version = "1.*",
-        opts = {
-            keymap = { preset = "super-tab" },
-            completion = {
-                list = { max_items = 4 },
-            },
-        },
-    },
-    { "NMAC427/guess-indent.nvim", opts = {} },
-    {
-        "m4xshen/hardtime.nvim",
-        dependencies = { "MunifTanjim/nui.nvim" },
-        opts = {},
-    },
-    {
-        "lewis6991/gitsigns.nvim",
-        event = "VeryLazy",
-    },
-    {
-        "erl-koenig/theme-hub.nvim",
-        dependencies = { "nvim-lua/plenary.nvim" },
-        config = function()
-            require("theme-hub").setup({
-                auto_install_on_select = true,
-            })
-        end,
-    },
-    {
-        "catppuccin/nvim",
-        name = "catppuccin",
-        lazy = false,
-        priority = 1000,
-        opts = {
-            flavour = "mocha", -- options: latte, frappe, macchiato, mocha
-        },
-        config = function(_, opts)
-            require("catppuccin").setup(opts)
-            vim.cmd.colorscheme("catppuccin")
-        end,
-    },
-    {
-        "kylechui/nvim-surround",
-        version = "*",
-        event = "VeryLazy",
-        config = function()
-            require("nvim-surround").setup({})
-        end,
-    },
-    {
-        "akinsho/toggleterm.nvim",
-        version = "*",
-        config = function()
-            require("toggleterm").setup({
-                open_mapping = nil,
-                direction = "float",
-                start_in_insert = true,
-                persist_size = true,
-                on_open = function(term) -- Put terminal in insert every time it's opened
-                    vim.schedule(function()
-                        vim.cmd("startinsert!")
-                    end)
-                end,
-            })
-        end,
-    },
-    {
-        "okuuva/auto-save.nvim",
-        opts = {
-            enabled = true,
-            condition = function(buf)
-                local fn = vim.fn
-                local utils = require("auto-save.utils.data")
-                local buf_name = vim.api.nvim_buf_get_name(buf)
+-- PackChanged is not a real event :/
+-- vim.api.nvim_create_autocmd("PackChanged", {
+--     callback = function(event)
+--         -- Trigger TSUpdate automatically when nvim-treesitter updates or installs
+--         if event.data.kind == "update" and event.data.spec.name == "nvim-treesitter" then
+--             pcall(vim.cmd, "TSUpdate")
+--         end
+--     end,
+-- })
 
-                -- Don't autosave unnamed buffers (e.g., pickers)
-                if buf_name ~= "" and fn.filereadable(buf_name) == 0 then
-                    Snacks.notify.warn("File missing: auto-save aborted", { title = "Auto-save" })
-                    return false
-                end
+vim.pack.add({
+    -- Dependencies
+    "https://github.com/MunifTanjim/nui.nvim",
+    "https://github.com/nvim-lua/plenary.nvim",
+    "https://github.com/williamboman/mason.nvim",
+    "https://github.com/williamboman/mason-lspconfig.nvim",
 
-                if
-                    fn.getbufvar(buf, "&modifiable") == 1
-                    and utils.not_in(fn.getbufvar(buf, "&filetype"), { "gitcommit", "gitrebase" })
-                then
-                    return true
-                end
-                return false
-            end,
-        },
-    },
+    { src="https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
+    "https://github.com/NMAC427/guess-indent.nvim",
+    "https://github.com/m4xshen/hardtime.nvim",
+    "https://github.com/lewis6991/gitsigns.nvim",
+    "https://github.com/erl-koenig/theme-hub.nvim",
+    "https://github.com/catppuccin/nvim",
+    "https://github.com/kylechui/nvim-surround",
+    "https://github.com/akinsho/toggleterm.nvim",
+    "https://github.com/okuuva/auto-save.nvim",
+    "https://github.com/windwp/nvim-autopairs",
+    "https://github.com/folke/snacks.nvim",
     {
-        "windwp/nvim-autopairs",
-        event = "InsertEnter",
-        config = true,
+        src = "https://github.com/mrcjkb/rustaceanvim",
+        version = vim.version.range("^9"),
     },
-    {
-        "folke/snacks.nvim",
-        lazy = false,
-        opts = {
-            picker = {
-                formatters = {
-                    file = {
-                        filename_first = true,
-                    },
-                },
-            },
-            scroll = {},
-            notifier = {
-                timeout = 5000,
-            },
-        },
-        keys = {
-            {
-                "<leader>f",
-                function()
-                    Snacks.picker.smart({ filter = { cwd = true } })
-                end,
-                desc = "Smart find (files + recent)",
-            },
-            {
-                "<leader>p",
-                function()
-                    Snacks.picker()
-                end,
-                desc = "All pickers",
-            },
-            {
-                "<leader>o",
-                function()
-                    Snacks.picker.zoxide()
-                end,
-                desc = "Zoxide picker, change working directory",
-            },
-        },
-    },
-    {
-        "mrcjkb/rustaceanvim",
-        version = "^8",
-        lazy = false, -- Implements custom lazy loading
-    },
-    {
-        "neovim/nvim-lspconfig",
-        dependencies = {
-            "williamboman/mason.nvim",
-            "williamboman/mason-lspconfig.nvim",
-        },
-        config = function()
-            require("mason").setup()
-            require("mason-lspconfig").setup({
-                ensure_installed = { "ruff", "ty", "stylua" },
-            })
-
-            vim.lsp.enable("ty")
-            vim.lsp.enable("ruff")
-            vim.lsp.enable("stylua")
-
-            vim.lsp.config("ty", {
-                autostart = true,
-                capabilities = { offsetEncoding = { "utf-16" } },
-            })
-            vim.lsp.config("ruff", {
-                autostart = true,
-            })
-            vim.lsp.config("stylua", {
-                autostart = true,
-            })
-        end,
-    },
-    {
-        "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
-        opts = {
-            auto_install = true,
-
-            highlight = {
-                enable = true,
-                additional_vim_regex_highlighting = false,
-            },
-
-            indent = { enable = true },
-        },
-    },
-}, {
-    install = { colorscheme = { theme } },
+    "https://github.com/neovim/nvim-lspconfig",
+    "https://github.com/nvim-treesitter/nvim-treesitter",
 })
+
+require("catppuccin").setup({
+    flavour = "mocha",
+})
+
+vim.cmd.colorscheme("catppuccin")
+
+require("blink.cmp").setup({
+    keymap = { preset = "super-tab" },
+    completion = { list = { max_items = 4 } },
+})
+
+require("guess-indent").setup({})
+
+require("hardtime").setup({})
+
+require("gitsigns").setup()
+
+require("theme-hub").setup({
+    auto_install_on_select = true,
+})
+
+require("nvim-surround").setup({})
+
+require("toggleterm").setup({
+    open_mapping = nil,
+    direction = "float",
+    start_in_insert = true,
+    persist_size = true,
+    on_open = function(term)
+        vim.schedule(function()
+            vim.cmd("startinsert!")
+        end)
+    end,
+})
+
+require("auto-save").setup({
+    enabled = true,
+    condition = function(buf)
+        local fn = vim.fn
+        local utils = require("auto-save.utils.data")
+        local buf_name = vim.api.nvim_buf_get_name(buf)
+
+        if buf_name ~= "" and fn.filereadable(buf_name) == 0 then
+            Snacks.notify.warn("File missing: auto-save aborted", { title = "Auto-save" })
+            return false
+        end
+
+        if
+            fn.getbufvar(buf, "&modifiable") == 1
+            and utils.not_in(fn.getbufvar(buf, "&filetype"), { "gitcommit", "gitrebase" })
+        then
+            return true
+        end
+        return false
+    end,
+})
+
+-- snacks
+require("snacks").setup({
+    picker = { formatters = { file = { filename_first = true } } },
+    notifier = { timeout = 5000 },
+    scroll = {},
+})
+vim.keymap.set("n", "<leader>f", function()
+    Snacks.picker.smart({ filter = { cwd = true } })
+end, { desc = "Smart find (files + recent)" })
+vim.keymap.set("n", "<leader>p", function()
+    Snacks.picker()
+end, { desc = "All pickers" })
+vim.keymap.set("n", "<leader>o", function()
+    Snacks.picker.zoxide()
+end, { desc = "Zoxide picker, change working directory" })
+
+-- Mason & LSP Config
+require("mason").setup()
+require("mason-lspconfig").setup({
+    ensure_installed = { "ruff", "ty", "stylua" },
+})
+vim.lsp.config("ty", { autostart = true, capabilities = { offsetEncoding = { "utf-16" } } })
+vim.lsp.enable("ty")
+vim.lsp.config("ruff", { autostart = true })
+vim.lsp.enable("ruff")
+vim.lsp.config("stylua", { autostart = true })
+vim.lsp.enable("stylua")
+
+require("nvim-treesitter").setup({
+    auto_install = true,
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+    },
+    indent = { enable = true },
+})
+
+require("nvim-autopairs").setup()
