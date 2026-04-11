@@ -1,12 +1,8 @@
--- =====================================================================
--- GENERAL SETTINGS
--- =====================================================================
-
 vim.g.mapleader = " " -- Leader key for shortcuts
 vim.opt.termguicolors = true
 vim.opt.clipboard = "unnamedplus" -- Share yank register with system clipboard
 vim.opt.mouse = "" -- Disable mouse
-vim.opt.laststatus = 1 -- Hide status bar when not in split
+vim.opt.laststatus = 2 -- Hide status bar when not in split
 vim.opt.ruler = false -- Hide cursor position readout bottom right
 vim.opt.cmdheight = 0 -- Hide command bar when not in use
 vim.opt.showmode = false -- Hide --INSERT-- readout
@@ -99,7 +95,7 @@ vim.keymap.set("n", "<leader>s", function()
 end, { desc = "Format current buffer" })
 
 -- =====================================================================
--- PACKAGE MANAGEMENT
+-- PACKAGES
 -- =====================================================================
 
 -- PackChanged is not a real event :/
@@ -136,6 +132,7 @@ vim.pack.add({
     },
     "https://github.com/neovim/nvim-lspconfig",
     "https://github.com/nvim-treesitter/nvim-treesitter",
+    "https://github.com/rmagatti/auto-session",
 })
 
 require("catppuccin").setup({
@@ -251,3 +248,8 @@ require("nvim-treesitter").setup({
 })
 
 require("nvim-autopairs").setup()
+
+require("auto-session").setup({
+    suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+    cwd_change_handling = true,
+})
