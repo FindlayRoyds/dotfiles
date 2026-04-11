@@ -119,7 +119,7 @@ vim.pack.add({
     "https://github.com/williamboman/mason.nvim",
     "https://github.com/williamboman/mason-lspconfig.nvim",
 
-    { src="https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
+    { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
     "https://github.com/NMAC427/guess-indent.nvim",
     "https://github.com/m4xshen/hardtime.nvim",
     "https://github.com/lewis6991/gitsigns.nvim",
@@ -147,6 +147,9 @@ vim.cmd.colorscheme("catppuccin")
 require("blink.cmp").setup({
     keymap = { preset = "super-tab" },
     completion = { list = { max_items = 4 } },
+    sources = {
+        default = { "lsp" },
+    },
 })
 
 require("guess-indent").setup({})
