@@ -119,7 +119,6 @@ vim.pack.add({
     "https://github.com/NMAC427/guess-indent.nvim",
     "https://github.com/m4xshen/hardtime.nvim",
     "https://github.com/lewis6991/gitsigns.nvim",
-    "https://github.com/erl-koenig/theme-hub.nvim",
     "https://github.com/catppuccin/nvim",
     "https://github.com/kylechui/nvim-surround",
     "https://github.com/akinsho/toggleterm.nvim",
@@ -166,10 +165,6 @@ end)
 vim.keymap.set("n", "<leader>gN", function()
     require("gitsigns").prev_hunk()
 end)
-
-require("theme-hub").setup({
-    auto_install_on_select = true,
-})
 
 require("nvim-surround").setup({})
 
