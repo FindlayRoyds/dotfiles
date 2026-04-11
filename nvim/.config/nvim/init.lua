@@ -90,11 +90,15 @@ vim.keymap.set("n", "<leader>s", function()
     vim.lsp.buf.format({ async = true })
 end, { desc = "Format current buffer" })
 
+vim.keymap.set('n', 'grd', function()
+    vim.diagnostic.open_float()
+end)
+
 -- =====================================================================
 -- PACKAGES
 -- =====================================================================
 
--- PackChanged is not a real event :/
+-- PackChanged is not a real event, not that it matters, nvim-treesitter is archived :(
 -- vim.api.nvim_create_autocmd("PackChanged", {
 --     callback = function(event)
 --         -- Trigger TSUpdate automatically when nvim-treesitter updates or installs
