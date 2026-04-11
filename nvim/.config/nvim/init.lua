@@ -78,10 +78,6 @@ vim.keymap.set("n", "<leader>J", "<C-w>J")
 vim.keymap.set("n", "<leader>K", "<C-w>K")
 vim.keymap.set("n", "<leader>L", "<C-w>L")
 
-vim.keymap.set("n", "gd", function()
-    Snacks.picker.lsp_definitions()
-end, { desc = "LSP Definition (Snacks)" })
-
 vim.api.nvim_create_autocmd("TermOpen", {
     group = vim.api.nvim_create_augroup("custom-terminal-config", { clear = true }),
     callback = function()
@@ -176,17 +172,35 @@ require("toggleterm").setup({
 vim.api.nvim_create_autocmd("DirChanged", {
     callback = function()
         local new_dir = vim.fn.getcwd()
-
         local status_ok, toggleterm = pcall(require, "toggleterm.terminal")
         if status_ok then
             for _, term in pairs(toggleterm.get_all()) do
-                -- if term:is_open() then
                 term:send("cd " .. new_dir)
-                -- end
             end
         end
     end,
 })
+
+require("snacks").setup({
+    picker = { formatters = { file = { filename_first = true } } },
+    notifier = { timeout = 5000 },
+    scroll = {},
+})
+vim.keymap.set("n", "<leader>f", function()
+    Snacks.picker.smart({ filter = { cwd = true } })
+end
+vim.keymap.set("n", "<leader>p", function()
+    Snacks.picker()
+end
+vim.keymap.set("n", "<leader>o", function()
+    Snacks.picker.zoxide()
+end
+vim.keymap.set("n", "gd", function()
+    Snacks.picker.lsp_definitions()
+end
+vim.keymap.set('n', 'grr', function()
+  Snacks.picker.lsp_references()
+end
 
 require("auto-save").setup({
     enabled = true,
@@ -210,23 +224,6 @@ require("auto-save").setup({
     end,
 })
 
--- snacks
-require("snacks").setup({
-    picker = { formatters = { file = { filename_first = true } } },
-    notifier = { timeout = 5000 },
-    scroll = {},
-})
-vim.keymap.set("n", "<leader>f", function()
-    Snacks.picker.smart({ filter = { cwd = true } })
-end, { desc = "Smart find (files + recent)" })
-vim.keymap.set("n", "<leader>p", function()
-    Snacks.picker()
-end, { desc = "All pickers" })
-vim.keymap.set("n", "<leader>o", function()
-    Snacks.picker.zoxide()
-end, { desc = "Zoxide picker, change working directory" })
-
--- Mason & LSP Config
 require("mason").setup()
 require("mason-lspconfig").setup({
     ensure_installed = { "ruff", "ty", "stylua" },
