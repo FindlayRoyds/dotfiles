@@ -90,7 +90,7 @@ vim.keymap.set("n", "<leader>s", function()
     vim.lsp.buf.format({ async = true })
 end, { desc = "Format current buffer" })
 
-vim.keymap.set('n', 'grd', function()
+vim.keymap.set("n", "grd", function()
     vim.diagnostic.open_float()
 end)
 
