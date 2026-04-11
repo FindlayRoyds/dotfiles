@@ -112,9 +112,9 @@ vim.pack.add({
     -- Dependencies
     "https://github.com/MunifTanjim/nui.nvim",
     "https://github.com/nvim-lua/plenary.nvim",
+
     "https://github.com/williamboman/mason.nvim",
     "https://github.com/williamboman/mason-lspconfig.nvim",
-
     { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
     "https://github.com/NMAC427/guess-indent.nvim",
     "https://github.com/m4xshen/hardtime.nvim",
