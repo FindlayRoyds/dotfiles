@@ -150,6 +150,18 @@ require("guess-indent").setup({})
 require("hardtime").setup({})
 
 require("gitsigns").setup()
+vim.keymap.set("n", "<leader>gp", function()
+    require("gitsigns").preview_hunk_inline()
+end)
+vim.keymap.set("n", "<leader>gr", function()
+    require("gitsigns").reset_hunk()
+end)
+vim.keymap.set("n", "<leader>gn", function()
+    require("gitsigns").next_hunk()
+end)
+vim.keymap.set("n", "<leader>gN", function()
+    require("gitsigns").prev_hunk()
+end)
 
 require("theme-hub").setup({
     auto_install_on_select = true,
