@@ -247,6 +247,7 @@ require("lazy").setup({
     {
         "mrcjkb/rustaceanvim",
         version = "^8",
+        lazy = false, -- Implements custom lazy loading
     },
     {
         "neovim/nvim-lspconfig",
