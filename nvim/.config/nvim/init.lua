@@ -1,4 +1,5 @@
 vim.g.mapleader = " " -- Leader key for shortcuts
+vim.g.localmapleader = " "
 vim.opt.termguicolors = true
 vim.opt.clipboard = "unnamedplus" -- Share yank register with system clipboard
 vim.opt.mouse = "" -- Disable mouse
@@ -12,11 +13,12 @@ vim.opt.sidescrolloff = 12 -- Horizontal padding
 vim.opt.splitright = true -- Open vertical splits to the right
 vim.opt.splitbelow = true -- Open horizontal splits below
 vim.opt.signcolumn = "yes" -- Show diagnostics to left of line numbers, always have space
-vim.diagnostic.config({
-    severity_sort = true, -- Prioritise showing E>W>H diagnostics
-})
 vim.opt.shortmess:append("I") -- Hide slpash screen stuff
 vim.opt.wrap = false -- Stop lines wrapping
+vim.opt.updatetime = 250 -- Decrease update time after stopping typing for linters, diagnostics, etc
+vim.opt.timeoutlen = 300 -- Decrease mapped sequence wait time
+vim.g.have_nerd_font = true
+vim.o.inccommand = "split" -- Preview substitutions while typing
 
 -- Don't continue comments onto newlines
 vim.api.nvim_create_autocmd("FileType", {
@@ -59,6 +61,16 @@ vim.api.nvim_create_autocmd({ "WinLeave" }, {
     callback = function()
         vim.opt_local.cursorline = false
     end,
+})
+
+-- Display certain whitespace characters in the editor
+vim.o.list = true
+vim.opt.listchars = { trail = "·", nbsp = "␣" }
+
+vim.diagnostic.config({
+    severity_sort = true, -- Prioritise showing E>W>H diagnostics
+    underline = { severity = { min = vim.diagnostic.severity.WARN } },
+    jump = { float = true },
 })
 
 -- =====================================================================
