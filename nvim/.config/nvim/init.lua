@@ -237,7 +237,7 @@ require("auto-save").setup({
 
 require("mason").setup()
 require("mason-lspconfig").setup({
-    ensure_installed = { "ruff", "ty", "stylua" },
+    ensure_installed = { "ruff", "ty", "stylua", "taplo" },
 })
 vim.lsp.config("ty", { autostart = true, capabilities = { offsetEncoding = { "utf-16" } } })
 vim.lsp.enable("ty")
@@ -245,6 +245,8 @@ vim.lsp.config("ruff", { autostart = true })
 vim.lsp.enable("ruff")
 vim.lsp.config("stylua", { autostart = true })
 vim.lsp.enable("stylua")
+vim.lsp.config("taplo", { autostart = true })
+vim.lsp.enable("taplo")
 
 require("nvim-treesitter").setup({
     auto_install = true,
