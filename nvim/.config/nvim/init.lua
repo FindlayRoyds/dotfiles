@@ -162,7 +162,9 @@ require("blink.cmp").setup({
 
 require("guess-indent").setup({})
 
-require("hardtime").setup({})
+require("hardtime").setup({
+    max_count = 6,
+})
 
 require("gitsigns").setup()
 vim.keymap.set("n", "<leader>gp", function()
