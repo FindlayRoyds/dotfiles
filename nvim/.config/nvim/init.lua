@@ -198,6 +198,16 @@ require("snacks").setup({
     picker = { formatters = { file = { filename_first = true } } },
     notifier = { timeout = 5000 },
     scroll = {},
+    input = {
+        win = {
+            on_win = function()
+                vim.schedule(function()
+                    vim.cmd.stopinsert()
+                    vim.api.nvim_win_set_cursor(0, { 1, 0 })
+                end)
+            end,
+        },
+    },
 })
 vim.keymap.set("n", "<leader>f", function()
     Snacks.picker.smart({ filter = { cwd = true } })
