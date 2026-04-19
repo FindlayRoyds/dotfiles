@@ -162,6 +162,16 @@ require("auto-session").setup({
         pre_cwd_changed_hook = function()
             vim.cmd("silent! %bd!")
         end,
+        post_cwd_changed_hook = function()
+            -- Close all active toggleterm instances
+            local ok, toggleterm = pcall(require, "toggleterm.terminal")
+            if ok then
+                local terminals = toggleterm.get_all()
+                for _, term in ipairs(terminals) do
+                    term:shutdown()
+                end
+            end
+        end,
     },
 })
 
