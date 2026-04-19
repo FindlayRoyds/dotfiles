@@ -149,21 +149,19 @@ vim.pack.add({
 require("catppuccin").setup({
     flavour = "mocha",
 })
-
 vim.cmd.colorscheme("catppuccin")
 
-require("blink.cmp").setup({
-    keymap = { preset = "super-tab" },
-    completion = { list = { max_items = 4 } },
-    sources = {
-        default = { "lsp" },
+require("auto-session").setup({
+    suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+    cwd_change_handling = true,
+
+    -- Clear buffers when changing to a dir that doesn't have a session saved
+    cwd_change_handling = {
+        restore_upcoming_session = true,
+        pre_cwd_changed_hook = function()
+            vim.cmd("silent! %bd!")
+        end,
     },
-})
-
-require("guess-indent").setup({})
-
-require("hardtime").setup({
-    max_count = 6,
 })
 
 require("gitsigns").setup()
@@ -179,20 +177,6 @@ end)
 vim.keymap.set("n", "<leader>gN", function()
     require("gitsigns").prev_hunk()
 end)
-
-require("nvim-surround").setup({})
-
-require("toggleterm").setup({
-    open_mapping = nil,
-    direction = "float",
-    start_in_insert = true,
-    persist_size = true,
-    on_open = function(term)
-        vim.schedule(function()
-            vim.cmd("startinsert!")
-        end)
-    end,
-})
 
 require("snacks").setup({
     picker = { formatters = { file = { filename_first = true } } },
@@ -225,6 +209,56 @@ vim.keymap.set("n", "grr", function()
     Snacks.picker.lsp_references()
 end)
 
+require("nvim-treesitter").setup({
+    auto_install = true,
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+    },
+    indent = { enable = true },
+})
+
+require("mason").setup()
+require("mason-lspconfig").setup({
+    ensure_installed = { "ruff", "ty", "stylua", "taplo" },
+})
+vim.lsp.config("ty", { autostart = true, capabilities = { offsetEncoding = { "utf-16" } } })
+vim.lsp.enable("ty")
+vim.lsp.config("ruff", { autostart = true })
+vim.lsp.enable("ruff")
+vim.lsp.config("stylua", { autostart = true })
+vim.lsp.enable("stylua")
+vim.lsp.config("taplo", { autostart = true })
+vim.lsp.enable("taplo")
+
+require("blink.cmp").setup({
+    keymap = { preset = "super-tab" },
+    completion = { list = { max_items = 4 } },
+    sources = {
+        default = { "lsp" },
+    },
+})
+
+require("guess-indent").setup({})
+
+require("hardtime").setup({
+    max_count = 6,
+})
+
+require("nvim-surround").setup({})
+
+require("toggleterm").setup({
+    open_mapping = nil,
+    direction = "float",
+    start_in_insert = true,
+    persist_size = true,
+    on_open = function(term)
+        vim.schedule(function()
+            vim.cmd("startinsert!")
+        end)
+    end,
+})
+
 require("auto-save").setup({
     enabled = true,
     condition = function(buf)
@@ -247,39 +281,4 @@ require("auto-save").setup({
     end,
 })
 
-require("mason").setup()
-require("mason-lspconfig").setup({
-    ensure_installed = { "ruff", "ty", "stylua", "taplo" },
-})
-vim.lsp.config("ty", { autostart = true, capabilities = { offsetEncoding = { "utf-16" } } })
-vim.lsp.enable("ty")
-vim.lsp.config("ruff", { autostart = true })
-vim.lsp.enable("ruff")
-vim.lsp.config("stylua", { autostart = true })
-vim.lsp.enable("stylua")
-vim.lsp.config("taplo", { autostart = true })
-vim.lsp.enable("taplo")
-
-require("nvim-treesitter").setup({
-    auto_install = true,
-    highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-    },
-    indent = { enable = true },
-})
-
 require("nvim-autopairs").setup()
-
-require("auto-session").setup({
-    suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-    cwd_change_handling = true,
-
-    -- Clear buffers when changing to a dir that doesn't have a session saved
-    cwd_change_handling = {
-        restore_upcoming_session = true,
-        pre_cwd_changed_hook = function()
-            vim.cmd("silent! %bd!")
-        end,
-    },
-})
