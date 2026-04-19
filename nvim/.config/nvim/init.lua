@@ -180,11 +180,25 @@ vim.keymap.set("n", "<leader>gN", function()
 end)
 
 require("snacks").setup({
-    picker = { formatters = { file = { filename_first = true } } },
+    picker = {
+        formatters = { file = { filename_first = true } },
+        sources = {
+            zoxide = {
+                -- Override the default confirm action so it doesn't open the file picker
+                confirm = function(picker, item)
+                    picker:close()
+                    if item and item.file then
+                        vim.api.nvim_set_current_dir(item.file)
+                    end
+                end,
+            },
+        },
+    },
     notifier = { timeout = 5000 },
     scroll = {},
     input = {
         win = {
+            -- Open input in normal mode
             on_win = function()
                 vim.schedule(function()
                     vim.cmd.stopinsert()
