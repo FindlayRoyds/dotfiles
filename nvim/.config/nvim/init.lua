@@ -274,4 +274,12 @@ require("nvim-autopairs").setup()
 require("auto-session").setup({
     suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
     cwd_change_handling = true,
+
+    -- Clear buffers when changing to a dir that doesn't have a session saved
+    cwd_change_handling = {
+        restore_upcoming_session = true,
+        pre_cwd_changed_hook = function()
+            vim.cmd("silent! %bd!")
+        end,
+    },
 })
