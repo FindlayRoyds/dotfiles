@@ -74,6 +74,19 @@ vim.diagnostic.config({
     jump = { float = true },
 })
 
+-- Close toggle term sessions when changing working dir
+vim.api.nvim_create_autocmd("DirChanged", {
+  callback = function()
+    local ok, toggleterm = pcall(require, "toggleterm.terminal")
+    if ok then
+      local terminals = toggleterm.get_all()
+      for _, term in ipairs(terminals) do
+        term:shutdown()
+      end
+    end
+  end,
+})
+
 -- =====================================================================
 -- KEYBINDS
 -- =====================================================================
@@ -161,16 +174,6 @@ require("auto-session").setup({
         pre_cwd_changed_hook = function()
             -- Clear buffers when changing to a dir that doesn't have a session saved
             vim.cmd("silent! %bd!")
-        end,
-        post_cwd_changed_hook = function()
-            -- Close all active toggleterm instances
-            local ok, toggleterm = pcall(require, "toggleterm.terminal")
-            if ok then
-                local terminals = toggleterm.get_all()
-                for _, term in ipairs(terminals) do
-                    term:shutdown()
-                end
-            end
         end,
     },
 })
