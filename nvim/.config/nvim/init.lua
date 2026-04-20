@@ -76,15 +76,15 @@ vim.diagnostic.config({
 
 -- Close toggle term sessions when changing working dir
 vim.api.nvim_create_autocmd("DirChanged", {
-  callback = function()
-    local ok, toggleterm = pcall(require, "toggleterm.terminal")
-    if ok then
-      local terminals = toggleterm.get_all()
-      for _, term in ipairs(terminals) do
-        term:shutdown()
-      end
-    end
-  end,
+    callback = function()
+        local ok, toggleterm = pcall(require, "toggleterm.terminal")
+        if ok then
+            local terminals = toggleterm.get_all()
+            for _, term in ipairs(terminals) do
+                term:shutdown()
+            end
+        end
+    end,
 })
 
 -- =====================================================================
@@ -158,6 +158,7 @@ vim.pack.add({
     "https://github.com/neovim/nvim-lspconfig",
     "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/rmagatti/auto-session",
+    "https://github.com/nvim-lualine/lualine.nvim",
 })
 
 require("catppuccin").setup({
@@ -175,6 +176,26 @@ require("auto-session").setup({
             -- Clear buffers when changing to a dir that doesn't have a session saved
             vim.cmd("silent! %bd!")
         end,
+    },
+})
+
+require("lualine").setup({
+    options = { section_separators = "", component_separators = "" },
+    sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = { "filename" },
+        lualine_x = { "diff", "diagnostics" },
+        lualine_y = {},
+        lualine_z = {},
+    },
+    inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = { "filename" },
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {},
     },
 })
 
