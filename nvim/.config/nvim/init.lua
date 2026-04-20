@@ -64,10 +64,6 @@ vim.api.nvim_create_autocmd({ "WinLeave" }, {
     end,
 })
 
--- Display certain whitespace characters in the editor
-vim.o.list = true
-vim.opt.listchars = { trail = "·", nbsp = "␣" }
-
 vim.diagnostic.config({
     severity_sort = true, -- Prioritise showing E>W>H diagnostics
     underline = { severity = { min = vim.diagnostic.severity.WARN } },
