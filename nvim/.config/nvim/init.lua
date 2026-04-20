@@ -64,6 +64,14 @@ vim.api.nvim_create_autocmd({ "WinLeave" }, {
     end,
 })
 
+-- Highlight text being yanked
+vim.api.nvim_create_autocmd("TextYankPost", {
+    group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
+    callback = function()
+        vim.hl.on_yank()
+    end,
+})
+
 vim.diagnostic.config({
     severity_sort = true, -- Prioritise showing E>W>H diagnostics
     underline = { severity = { min = vim.diagnostic.severity.WARN } },
