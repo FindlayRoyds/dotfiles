@@ -91,6 +91,19 @@ vim.api.nvim_create_autocmd("DirChanged", {
     end,
 })
 
+-- Open zoxide picker when opening nvim in ~
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        -- Ensure no files were passed as arguments and CWD is home
+        if vim.fn.argc() == 0 and vim.fn.getcwd() == vim.fn.expand("~") then
+            -- vim.schedule prevents UI conflicts by waiting for Neovim to initialize
+            vim.schedule(function()
+                Snacks.picker.zoxide()
+            end)
+        end
+    end,
+})
+
 -- =====================================================================
 -- KEYBINDS
 -- =====================================================================
