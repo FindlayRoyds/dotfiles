@@ -304,7 +304,7 @@ vim.lsp.config("clangd", {
         "--clang-tidy",
         "--header-insertion=iwyu",
         "--completion-style=detailed",
-        "--function-arg-placeholders",
+        "--function-arg-placeholders=0",
         "--fallback-style=llvm",
     },
     autostart = true,
