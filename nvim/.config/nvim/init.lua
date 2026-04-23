@@ -274,9 +274,9 @@ require("nvim-treesitter").setup({
 
 require("mason").setup()
 require("mason-lspconfig").setup({
-    ensure_installed = { "ruff", "ty", "stylua", "taplo" },
+    ensure_installed = { "ruff", "ty", "stylua", "taplo", "clangd" },
 })
-vim.lsp.config("ty", { autostart = true, capabilities = { offsetEncoding = { "utf-16" } } })
+vim.lsp.config("ty", { autostart = true })
 vim.lsp.enable("ty")
 vim.lsp.config("ruff", { autostart = true })
 vim.lsp.enable("ruff")
@@ -284,6 +284,21 @@ vim.lsp.config("stylua", { autostart = true })
 vim.lsp.enable("stylua")
 vim.lsp.config("taplo", { autostart = true })
 vim.lsp.enable("taplo")
+vim.lsp.config("clangd", {
+    cmd = {
+        "clangd",
+        "--background-index",
+        "--clang-tidy",
+        "--header-insertion=iwyu",
+        "--completion-style=detailed",
+        "--function-arg-placeholders",
+        "--fallback-style=llvm",
+    },
+    autostart = true,
+})
+
+vim.lsp.enable("clangd")
+vim.lsp.enable("clangd")
 
 require("blink.cmp").setup({
     keymap = { preset = "super-tab" },
