@@ -169,7 +169,6 @@ vim.pack.add({
     "https://github.com/williamboman/mason-lspconfig.nvim",
     { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
     "https://github.com/NMAC427/guess-indent.nvim",
-    "https://github.com/m4xshen/hardtime.nvim",
     "https://github.com/lewis6991/gitsigns.nvim",
     "https://github.com/catppuccin/nvim",
     "https://github.com/kylechui/nvim-surround",
@@ -337,10 +336,6 @@ require("blink.cmp").setup({
 })
 
 require("guess-indent").setup({})
-
-require("hardtime").setup({
-    max_count = 6,
-})
 
 require("nvim-surround").setup({})
 
