@@ -104,6 +104,15 @@ vim.api.nvim_create_autocmd("VimEnter", {
     end,
 })
 
+-- Auto-save files (e.g. rename variable in file not open in buffer)
+local default_apply_edit_handler = vim.lsp.handlers["textDocument/rename"]
+vim.lsp.handlers["textDocument/rename"] = function(err, workspace_edit, ctx, config)
+    local res = default_apply_edit_handler(err, workspace_edit, ctx, config)
+    vim.cmd("silent! wa")
+
+    return res
+end
+
 -- =====================================================================
 -- KEYBINDS
 -- =====================================================================
