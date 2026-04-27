@@ -50,19 +50,19 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
 })
 
 -- Highlight line and line number of active window
-local cursorline_group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
-vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
-    group = cursorline_group,
-    callback = function()
-        vim.opt_local.cursorline = true
-    end,
-})
-vim.api.nvim_create_autocmd({ "WinLeave" }, {
-    group = cursorline_group,
-    callback = function()
-        vim.opt_local.cursorline = false
-    end,
-})
+-- local cursorline_group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
+-- vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
+--     group = cursorline_group,
+--     callback = function()
+--         vim.opt_local.cursorline = true
+--     end,
+-- })
+-- vim.api.nvim_create_autocmd({ "WinLeave" }, {
+--     group = cursorline_group,
+--     callback = function()
+--         vim.opt_local.cursorline = false
+--     end,
+-- })
 
 -- Highlight text being yanked
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -185,6 +185,7 @@ vim.pack.add({
     "https://github.com/rmagatti/auto-session",
     "https://github.com/nvim-lualine/lualine.nvim",
     "https://github.com/MeanderingProgrammer/render-markdown.nvim",
+    "https://github.com/nvim-focus/focus.nvim",
 })
 
 require("catppuccin").setup({
@@ -278,7 +279,7 @@ vim.keymap.set("n", "<leader>po", function()
     Snacks.picker.zoxide()
 end)
 vim.keymap.set("n", "<leader>o", function() --                   TODO remove this at some point
-    Snacks.notify("I changed the shortcut to space -> p -> o lol")
+    Snacks.notify("I changed the shortcut to space -> p -> o")
 end)
 vim.keymap.set("n", "<leader>pg", function()
     Snacks.picker.grep()
@@ -329,6 +330,12 @@ vim.lsp.config("clangd", {
 
 vim.lsp.enable("clangd")
 vim.lsp.enable("clangd")
+
+require("focus").setup({
+    ui = {
+        signcolumn = false,
+    },
+})
 
 require("blink.cmp").setup({
     keymap = { preset = "super-tab" },
