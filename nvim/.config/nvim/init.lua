@@ -185,7 +185,6 @@ vim.pack.add({
     "https://github.com/rmagatti/auto-session",
     "https://github.com/nvim-lualine/lualine.nvim",
     "https://github.com/MeanderingProgrammer/render-markdown.nvim",
-    "https://github.com/nvim-focus/focus.nvim",
 })
 
 require("catppuccin").setup({
@@ -330,12 +329,6 @@ vim.lsp.config("clangd", {
 
 vim.lsp.enable("clangd")
 vim.lsp.enable("clangd")
-
-require("focus").setup({
-    ui = {
-        signcolumn = false,
-    },
-})
 
 require("blink.cmp").setup({
     keymap = { preset = "super-tab" },
