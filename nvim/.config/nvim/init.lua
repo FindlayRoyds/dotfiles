@@ -16,7 +16,7 @@ vim.opt.signcolumn = "yes" -- Show diagnostics to left of line numbers, always h
 vim.opt.shortmess:append("I") -- Hide slpash screen stuff
 vim.opt.wrap = false -- Stop lines wrapping
 vim.opt.updatetime = 250 -- Decrease update time after stopping typing for linters, diagnostics, etc
-vim.opt.timeoutlen = 500 -- Decrease mapped sequence wait time
+vim.opt.timeoutlen = 750 -- Decrease mapped sequence wait time
 vim.g.have_nerd_font = true
 vim.opt.inccommand = "split" -- Preview substitutions while typing
 vim.opt.swapfile = false -- Don't need swap files for recovery, use git etc
