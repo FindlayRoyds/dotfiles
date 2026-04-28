@@ -50,19 +50,48 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
 })
 
 -- Highlight line and line number of active window
--- local cursorline_group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
--- vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
---     group = cursorline_group,
---     callback = function()
---         vim.opt_local.cursorline = true
---     end,
--- })
--- vim.api.nvim_create_autocmd({ "WinLeave" }, {
---     group = cursorline_group,
---     callback = function()
---         vim.opt_local.cursorline = false
---     end,
--- })
+local cursorline_group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
+vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
+    group = cursorline_group,
+    callback = function()
+        vim.opt_local.cursorline = true
+    end,
+})
+vim.api.nvim_create_autocmd({ "WinLeave" }, {
+    group = cursorline_group,
+    callback = function()
+        vim.opt_local.cursorline = false
+    end,
+})
+
+-- Enter insert mode when switching to / opening a terminal
+vim.api.nvim_create_autocmd({ "WinEnter", "TermOpen" }, {
+    group = vim.api.nvim_create_augroup("TerminalAutoInsert", { clear = true }),
+    callback = function()
+        if vim.bo.buftype == "terminal" then
+            vim.schedule(function()
+                vim.cmd("startinsert!")
+            end)
+        end
+    end,
+})
+
+-- Set cursor to vertical line in terminal insert mode
+local term_cursor_group = vim.api.nvim_create_augroup("TerminalCursor", { clear = true })
+vim.api.nvim_create_autocmd("TermEnter", {
+    group = term_cursor_group,
+    callback = function()
+        vim.schedule(function()
+            vim.opt.guicursor = "a:ver25"
+        end)
+    end,
+})
+vim.api.nvim_create_autocmd("TermLeave", {
+    group = term_cursor_group,
+    callback = function()
+        vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr-o:hor20"
+    end,
+})
 
 -- Highlight text being yanked
 vim.api.nvim_create_autocmd("TextYankPost", {
