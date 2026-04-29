@@ -16,7 +16,7 @@ vim.opt.signcolumn = "yes" -- Show diagnostics to left of line numbers, always h
 vim.opt.shortmess:append("I") -- Hide slpash screen stuff
 vim.opt.wrap = false -- Stop lines wrapping
 vim.opt.updatetime = 250 -- Decrease update time after stopping typing for linters, diagnostics, etc
-vim.opt.timeoutlen = 750 -- Decrease mapped sequence wait time
+vim.opt.timeoutlen = 1000 -- Decrease mapped sequence wait time
 vim.g.have_nerd_font = true
 vim.opt.inccommand = "split" -- Preview substitutions while typing
 vim.opt.swapfile = false -- Don't need swap files for recovery, use git etc
@@ -159,11 +159,36 @@ vim.keymap.set("n", "<leader>J", "<C-w>J")
 vim.keymap.set("n", "<leader>K", "<C-w>K")
 vim.keymap.set("n", "<leader>L", "<C-w>L")
 
+-- Vibe coded function to immediately send esc in terminal (e.g., for when in vim inside nvim terminal)
 vim.api.nvim_create_autocmd("TermOpen", {
     group = vim.api.nvim_create_augroup("custom-terminal-config", { clear = true }),
-    callback = function()
-        vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { buffer = 0, desc = "Exit terminal mode" })
-        vim.keymap.set("t", "<Space>", "<Space>", { buffer = 0 }) -- Force Space to be sent immediately in Terminal mode
+    callback = function(args)
+        local buf = args.buf
+
+        vim.keymap.set("t", "<Esc>", function()
+            -- vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { buffer = 0, desc = "Exit terminal mode" })
+            local term_id = vim.b[buf].terminal_job_id
+
+            if vim.b[buf].esc_timer then
+                -- Second <Esc> pressed within the timeout window
+                vim.b[buf].esc_timer = false
+                local termcodes = vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true)
+                vim.api.nvim_feedkeys(termcodes, "n", false)
+            else
+                -- First <Esc> pressed: start timer and send raw Esc immediately
+                vim.b[buf].esc_timer = true
+
+                if term_id then
+                    vim.api.nvim_chan_send(term_id, "\27") -- Send raw Escape byte
+                end
+
+                vim.defer_fn(function()
+                    if vim.api.nvim_buf_is_valid(buf) then
+                        vim.b[buf].esc_timer = false
+                    end
+                end, vim.o.timeoutlen) -- Uses your standard Neovim timeoutlen
+            end
+        end, { buffer = buf, desc = "Immediate Esc or double Esc to exit" })
     end,
 })
 
