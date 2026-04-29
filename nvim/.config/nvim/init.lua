@@ -3,10 +3,7 @@ vim.g.localmapleader = " "
 vim.opt.termguicolors = true
 vim.opt.clipboard = "unnamedplus" -- Share yank register with system clipboard
 vim.opt.mouse = "" -- Disable mouse
-vim.opt.laststatus = 2 -- Hide status bar when not in split
-vim.opt.ruler = false -- Hide cursor position readout bottom right
 vim.opt.cmdheight = 0 -- Hide command bar when not in use
-vim.opt.showmode = false -- Hide --INSERT-- readout
 vim.opt.undofile = true -- Persistent undo history
 vim.opt.scrolloff = 10 -- Vertical padding
 vim.opt.sidescrolloff = 12 -- Horizontal padding
@@ -20,6 +17,7 @@ vim.opt.timeoutlen = 1000 -- Decrease mapped sequence wait time
 vim.g.have_nerd_font = true
 vim.opt.inccommand = "split" -- Preview substitutions while typing
 vim.opt.swapfile = false -- Don't need swap files for recovery, use git etc
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,t:ver25" -- Line cursor in terminal mode
 
 -- Don't continue comments onto newlines
 vim.api.nvim_create_autocmd("FileType", {
@@ -73,23 +71,6 @@ vim.api.nvim_create_autocmd({ "WinEnter", "TermOpen" }, {
                 vim.cmd("startinsert!")
             end)
         end
-    end,
-})
-
--- Set cursor to vertical line in terminal insert mode
-local term_cursor_group = vim.api.nvim_create_augroup("TerminalCursor", { clear = true })
-vim.api.nvim_create_autocmd("TermEnter", {
-    group = term_cursor_group,
-    callback = function()
-        vim.schedule(function()
-            vim.opt.guicursor = "a:ver25"
-        end)
-    end,
-})
-vim.api.nvim_create_autocmd("TermLeave", {
-    group = term_cursor_group,
-    callback = function()
-        vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr-o:hor20"
     end,
 })
 
