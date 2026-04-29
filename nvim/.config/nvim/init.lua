@@ -67,9 +67,7 @@ vim.api.nvim_create_autocmd({ "WinEnter", "TermOpen" }, {
     group = vim.api.nvim_create_augroup("TerminalAutoInsert", { clear = true }),
     callback = function()
         if vim.bo.buftype == "terminal" then
-            vim.schedule(function()
-                vim.cmd("startinsert!")
-            end)
+            vim.cmd("startinsert!")
         end
     end,
 })
