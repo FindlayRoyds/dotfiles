@@ -338,7 +338,7 @@ vim.keymap.set("n", "<leader>pg", function()
     Snacks.picker.grep()
 end)
 vim.keymap.set("n", "<leader>pd", function()
-    Snacks.picker.git_diff()
+    Snacks.picker.git_diff({ focus = "list" })
 end)
 vim.keymap.set("n", "gd", function()
     Snacks.picker.lsp_definitions()
@@ -349,7 +349,10 @@ end)
 vim.keymap.set("n", "giw", function()
     local word = vim.fn.expand("<cword>")
     local ok, err = pcall(function()
-        Snacks.picker.grep({ search = word })
+        Snacks.picker.grep({
+            search = word,
+            focus = "list",
+        })
     end)
     if not ok then
         Snacks.notify("Failed to grep word")
