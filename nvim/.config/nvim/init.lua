@@ -217,7 +217,6 @@ vim.pack.add({
     "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/rmagatti/auto-session",
     "https://github.com/nvim-lualine/lualine.nvim",
-    "https://github.com/MeanderingProgrammer/render-markdown.nvim",
 })
 
 require("catppuccin").setup({
@@ -422,13 +421,3 @@ require("auto-save").setup({
 })
 
 require("nvim-autopairs").setup()
-
-require("render-markdown").setup({
-    completions = { lsp = { enabled = true } },
-    heading = {
-        icons = {}, -- Just show #, ##, etc
-    },
-    sign = {
-        enabled = false, -- Don't show anything in the signs column
-    },
-})
