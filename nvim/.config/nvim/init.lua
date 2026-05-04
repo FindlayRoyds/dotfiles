@@ -6,7 +6,7 @@ vim.opt.mouse = "" -- Disable mouse
 vim.opt.cmdheight = 0 -- Hide command bar when not in use
 vim.opt.undofile = true -- Persistent undo history
 vim.opt.scrolloff = 10 -- Vertical padding
-vim.opt.sidescrolloff = 12 -- Horizontal padding
+vim.opt.sidescrolloff = 24 -- Horizontal padding
 vim.opt.splitright = true -- Open vertical splits to the right
 vim.opt.splitbelow = true -- Open horizontal splits below
 vim.opt.signcolumn = "yes" -- Show diagnostics to left of line numbers, always have space
@@ -120,6 +120,31 @@ vim.lsp.handlers["textDocument/rename"] = function(err, workspace_edit, ctx, con
 
     return res
 end
+
+vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+    group = vim.api.nvim_create_augroup("AsymmetricScroll", { clear = true }),
+    callback = function()
+        local win_id = vim.api.nvim_get_current_win()
+        if vim.wo[win_id].wrap then
+            return
+        end
+
+        local win_info = vim.fn.getwininfo(win_id)[1]
+        local effective_width = win_info.width - win_info.textoff
+        local cursor_col = vim.fn.virtcol(".")
+        local view = vim.fn.winsaveview()
+
+        -- When to scroll to the left (half width of window)
+        local left_scroll_trigger = math.floor(effective_width / 2)
+
+        local target_leftcol = math.max(0, cursor_col - (effective_width - left_scroll_trigger))
+
+        if view.leftcol > target_leftcol then
+            view.leftcol = target_leftcol
+            vim.fn.winrestview(view)
+        end
+    end,
+})
 
 -- =====================================================================
 -- KEYBINDS
