@@ -18,6 +18,7 @@ vim.g.have_nerd_font = true
 vim.opt.inccommand = "split" -- Preview substitutions while typing
 vim.opt.swapfile = false -- Don't need swap files for recovery, use git etc
 vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,t:ver25" -- Line cursor in terminal mode
+vim.opt.undolevels = 2000 -- Longer undo history
 
 -- Don't continue comments onto newlines
 vim.api.nvim_create_autocmd("FileType", {
