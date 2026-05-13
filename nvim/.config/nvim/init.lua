@@ -229,7 +229,6 @@ vim.pack.add({
     { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
     "https://github.com/NMAC427/guess-indent.nvim",
     "https://github.com/lewis6991/gitsigns.nvim",
-    "https://github.com/catppuccin/nvim",
     "https://github.com/kylechui/nvim-surround",
     "https://github.com/akinsho/toggleterm.nvim",
     "https://github.com/okuuva/auto-save.nvim",
@@ -243,12 +242,13 @@ vim.pack.add({
     "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/rmagatti/auto-session",
     "https://github.com/nvim-lualine/lualine.nvim",
+
+    "https://github.com/catppuccin/nvim",
+    "https://github.com/ellisonleao/gruvbox.nvim",
+    "https://github.com/folke/tokyonight.nvim",
 })
 
-require("catppuccin").setup({
-    flavour = "mocha",
-})
-vim.cmd.colorscheme("catppuccin")
+local has_local, local_conf = pcall(require, "local") -- Local config
 
 require("auto-session").setup({
     suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
