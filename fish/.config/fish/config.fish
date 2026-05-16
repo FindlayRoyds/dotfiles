@@ -1,3 +1,6 @@
+
+eval (/opt/homebrew/bin/brew shellenv)
+
 if status is-interactive
     set fish_greeting # no more welcome message
 
