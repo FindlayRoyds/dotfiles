@@ -1,8 +1,13 @@
 local Config = {}
 
+require("gruvbox").setup({
+    overrides = {
+        SignColumn = { bg = "none" },
+        CursorLineSign = { bg = "none" },
+        CursorLineNr = { bg = "none" },
+    }
+})
+
 vim.cmd.colorscheme("gruvbox")
-vim.cmd("hi SignColumn guibg=NONE") -- Make the sign column background match the main background
-vim.cmd("hi CursorLineSign guibg=NONE") -- Prevent the current line highlight from extending into the sign column
-vim.cmd("hi CursorLineNr guibg=NONE") -- Prevent the current line highlight from extending into the line number column
 
 return Config
