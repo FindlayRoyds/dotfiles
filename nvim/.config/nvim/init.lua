@@ -20,6 +20,19 @@ vim.opt.swapfile = false -- Don't need swap files for recovery, use git etc
 vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,t:ver25" -- Line cursor in terminal mode
 vim.opt.undolevels = 2000 -- Longer undo history
 
+local target_height = 49
+local poll_interval = 10000
+local timer = vim.uv.new_timer()
+if timer ~= nil then
+    timer:start(0, poll_interval, function()
+        vim.schedule(function()
+            if vim.o.lines ~= target_height then
+                Snacks.notify.warn("Press f11 to go fullscreen")
+            end
+        end)
+    end)
+end
+
 -- Don't continue comments onto newlines
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "*",
