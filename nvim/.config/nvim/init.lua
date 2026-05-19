@@ -248,12 +248,10 @@ vim.pack.add({
     "https://github.com/folke/tokyonight.nvim",
 })
 
-local has_local, local_conf = pcall(require, "local") -- Local config
+pcall(require, "local") -- Local config
 
 require("auto-session").setup({
     suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-    cwd_change_handling = true,
-
     cwd_change_handling = {
         restore_upcoming_session = true,
         pre_cwd_changed_hook = function()
@@ -360,7 +358,7 @@ vim.keymap.set("n", "grr", function()
 end)
 vim.keymap.set("n", "giw", function()
     local word = vim.fn.expand("<cword>")
-    local ok, err = pcall(function()
+    local ok = pcall(function()
         Snacks.picker.grep({
             search = word,
         })
@@ -381,7 +379,7 @@ require("nvim-treesitter").setup({
 
 require("mason").setup()
 require("mason-lspconfig").setup({
-    ensure_installed = { "ruff", "ty", "stylua", "taplo", "clangd" },
+    ensure_installed = { "ruff", "ty", "stylua", "taplo", "clangd", "lua_ls" },
 })
 vim.lsp.config("ty", { autostart = true })
 vim.lsp.enable("ty")
@@ -403,9 +401,28 @@ vim.lsp.config("clangd", {
     },
     autostart = true,
 })
-
 vim.lsp.enable("clangd")
-vim.lsp.enable("clangd")
+vim.lsp.config("lua_ls", {
+    autostart = true,
+    settings = {
+        Lua = {
+            runtime = {
+                version = "LuaJIT",
+            },
+            diagnostics = {
+                globals = { "vim", "Snacks" },
+            },
+            workspace = {
+                library = {
+                    vim.env.VIMRUNTIME,
+                    "${3rd}/luv/library", -- Enables vim.uv / libuv completions
+                },
+                checkThirdParty = false,
+            },
+        },
+    },
+})
+vim.lsp.enable("lua_ls")
 
 require("blink.cmp").setup({
     keymap = { preset = "super-tab" },
@@ -424,7 +441,7 @@ require("toggleterm").setup({
     direction = "float",
     start_in_insert = true,
     persist_size = true,
-    on_open = function(term)
+    on_open = function(_)
         vim.schedule(function()
             vim.cmd("startinsert!")
         end)
