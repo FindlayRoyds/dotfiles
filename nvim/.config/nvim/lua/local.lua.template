@@ -1,6 +1,10 @@
 local Config = {}
 
 require("gruvbox").setup({
+    palette_overrides = {
+        bright_green = "#98971a",
+    },
+
     overrides = {
         SignColumn = { bg = "none" },
         CursorLineSign = { bg = "none" },
