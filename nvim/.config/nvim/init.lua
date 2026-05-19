@@ -261,7 +261,18 @@ vim.pack.add({
     "https://github.com/folke/tokyonight.nvim",
 })
 
-pcall(require, "local") -- Local config
+-- Before importing local config so it can be overridden
+require("gruvbox").setup({
+    palette_overrides = {
+        bright_green = "#98971a",
+    },
+    overrides = {
+        SignColumn = { bg = "none" },
+        CursorLineSign = { bg = "none" },
+        CursorLineNr = { bg = "none" },
+    },
+})
+vim.cmd.colorscheme("gruvbox")
 
 require("auto-session").setup({
     suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
@@ -484,3 +495,5 @@ require("auto-save").setup({
 })
 
 require("nvim-autopairs").setup()
+
+pcall(require, "local") -- Local config
