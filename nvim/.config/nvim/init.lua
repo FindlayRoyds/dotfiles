@@ -326,7 +326,12 @@ require("snacks").setup({
         },
     },
 })
-vim.keymap.set("n", "<leader>f", function()
+
+vim.keymap.set("n", "<leader>p", "<Nop>") -- Prevent 'p' from pasting after timeout
+vim.keymap.set("n", "<leader>f", function() --                                          TODO remove at some point
+    Snacks.notify.warn("The shortcut has been changed to space-p-f")
+end)
+vim.keymap.set("n", "<leader>pf", function()
     Snacks.picker.smart({ filter = { cwd = true } })
 end)
 vim.keymap.set("n", "<leader>pp", function()
@@ -340,6 +345,9 @@ vim.keymap.set("n", "<leader>pg", function()
 end)
 vim.keymap.set("n", "<leader>pe", function()
     Snacks.picker.explorer({ ignored = true, hidden = true })
+end)
+vim.keymap.set("n", "<leader>pu", function()
+    Snacks.picker.undo()
 end)
 vim.keymap.set("n", "<leader>pd", function()
     Snacks.picker.git_diff({ focus = "list" })
@@ -355,7 +363,6 @@ vim.keymap.set("n", "giw", function()
     local ok, err = pcall(function()
         Snacks.picker.grep({
             search = word,
-            focus = "list",
         })
     end)
     if not ok then
