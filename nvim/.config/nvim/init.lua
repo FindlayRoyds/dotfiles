@@ -102,6 +102,7 @@ vim.pack.add({
 
     -- Git integration
     "https://github.com/lewis6991/gitsigns.nvim",
+    "https://github.com/akinsho/git-conflict.nvim",
 
     -- Large plugins / visual changes
     "https://github.com/folke/snacks.nvim",
@@ -395,6 +396,8 @@ require("nvim-autopairs").setup()
 require("cutlass").setup({
     cut_key = "m",
 })
+
+require("git-conflict").setup({})
 
 -- =====================================================================
 -- AUTOCOMMANDS
