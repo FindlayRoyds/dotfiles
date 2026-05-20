@@ -1,0 +1,39 @@
+[merge]
+    tool = kdiff3 # ATL default
+
+[init]
+    defaultBranch = master # ATL default
+
+[stgit]
+    smtpserver = int-smtp.atlnz.lc # ATL default
+
+    # Interactive two/three-way merge tool. It is executed by the
+    # 'resolved --interactive' command
+    imerger = kdiff3 \"%(ancestor)s\" \"%(current)s\" \"%(patched)s\" # ATL default
+    i3merge = kdiff3 \"%(ancestor)s\" \"%(current)s\" \"%(patched)s\" # ATL default
+    i2merge = kdiff3 \"%(current)s\" \"%(patched)s\" # ATL default
+
+    # Automatically invoke the interactive merger in case of conflicts
+    autoimerge = yes # ATL default
+	sender = Findlay Royds <findlay.royds@alliedtelesis.co.nz> # ATL default
+
+[push]
+    default = simple # ATL default
+
+[status]
+	submodulesummary = true # ATL default
+
+[user]
+	name = Findlay Royds # ATL default
+	email = findlay.royds@alliedtelesis.co.nz # ATL default
+
+[color]
+	ui = auto # ATL default
+
+[core]
+	editor = nvim
+	excludesfiles = /home/findlayr/.gitignore_global
+	excludesfile = /home/findlayr/.gitignore_global
+
+[alias]
+    df = -c diff.external=difft diff
