@@ -34,19 +34,83 @@ vim.diagnostic.config({
 -- KEYBINDS
 -- =====================================================================
 
-vim.keymap.set("n", "<leader>t", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
 
+-- Window navigation
 vim.keymap.set("n", "<leader>h", "<C-w>h")
 vim.keymap.set("n", "<leader>j", "<C-w>j")
 vim.keymap.set("n", "<leader>k", "<C-w>k")
 vim.keymap.set("n", "<leader>l", "<C-w>l")
-
 vim.keymap.set("n", "<leader>H", "<C-w>H")
 vim.keymap.set("n", "<leader>J", "<C-w>J")
 vim.keymap.set("n", "<leader>K", "<C-w>K")
 vim.keymap.set("n", "<leader>L", "<C-w>L")
 
+-- Gitsigns
+vim.keymap.set("n", "<leader>gp", function()
+    require("gitsigns").preview_hunk_inline()
+end)
+vim.keymap.set("n", "<leader>gr", function()
+    require("gitsigns").reset_hunk()
+end)
+vim.keymap.set("n", "<leader>gn", function()
+    require("gitsigns").next_hunk()
+end)
+vim.keymap.set("n", "<leader>gN", function()
+    require("gitsigns").prev_hunk()
+end)
+
+-- Snacks pickers
+vim.keymap.set("n", "<leader>p", "<Nop>") -- Prevent 'p' from pasting after timeout
+vim.keymap.set("n", "<leader>pf", function()
+    Snacks.picker.smart({ filter = { cwd = true } })
+end)
+vim.keymap.set("n", "<leader>pp", function()
+    Snacks.picker()
+end)
+vim.keymap.set("n", "<leader>po", function()
+    Snacks.picker.zoxide()
+end)
+vim.keymap.set("n", "<leader>pg", function()
+    Snacks.picker.grep()
+end)
+vim.keymap.set("n", "<leader>pe", function()
+    Snacks.picker.explorer({ ignored = true, hidden = true })
+end)
+vim.keymap.set("n", "<leader>pu", function()
+    Snacks.picker.undo()
+end)
+vim.keymap.set("n", "<leader>pd", function()
+    Snacks.picker.git_diff({ focus = "list" })
+end)
+vim.keymap.set("n", "gd", function()
+    Snacks.picker.lsp_definitions()
+end)
+vim.keymap.set("n", "grr", function()
+    Snacks.picker.lsp_references()
+end)
+vim.keymap.set("n", "giw", function()
+    local word = vim.fn.expand("<cword>")
+    local ok = pcall(function()
+        Snacks.picker.grep({
+            search = word,
+        })
+    end)
+    if not ok then
+        Snacks.notify("Failed to grep word")
+    end
+end)
+
+-- LSP related
+vim.keymap.set("n", "<leader>s", function()
+    vim.lsp.buf.format({ async = true })
+end, { desc = "Format current buffer" })
+vim.keymap.set("n", "grd", function()
+    vim.diagnostic.open_float()
+end)
+
+-- Terminal
+vim.keymap.set("n", "<leader>t", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
 -- Vibe coded function to immediately send esc in terminal (e.g., for when in vim inside nvim terminal)
 vim.api.nvim_create_autocmd("TermOpen", {
     group = vim.api.nvim_create_augroup("custom-terminal-config", { clear = true }),
@@ -79,14 +143,6 @@ vim.api.nvim_create_autocmd("TermOpen", {
         end, { buffer = buf, desc = "Immediate Esc or double Esc to exit" })
     end,
 })
-
-vim.keymap.set("n", "<leader>s", function()
-    vim.lsp.buf.format({ async = true })
-end, { desc = "Format current buffer" })
-
-vim.keymap.set("n", "grd", function()
-    vim.diagnostic.open_float()
-end)
 
 -- =====================================================================
 -- PACKAGES
@@ -169,18 +225,6 @@ require("lualine").setup({
 })
 
 require("gitsigns").setup()
-vim.keymap.set("n", "<leader>gp", function()
-    require("gitsigns").preview_hunk_inline()
-end)
-vim.keymap.set("n", "<leader>gr", function()
-    require("gitsigns").reset_hunk()
-end)
-vim.keymap.set("n", "<leader>gn", function()
-    require("gitsigns").next_hunk()
-end)
-vim.keymap.set("n", "<leader>gN", function()
-    require("gitsigns").prev_hunk()
-end)
 
 require("snacks").setup({
     picker = {
@@ -246,48 +290,6 @@ require("snacks").setup({
         },
     },
 })
-vim.keymap.set("n", "<leader>p", "<Nop>") -- Prevent 'p' from pasting after timeout
-vim.keymap.set("n", "<leader>f", function() --                                          TODO remove at some point
-    Snacks.notify.warn("The shortcut has been changed to space-p-f")
-end)
-vim.keymap.set("n", "<leader>pf", function()
-    Snacks.picker.smart({ filter = { cwd = true } })
-end)
-vim.keymap.set("n", "<leader>pp", function()
-    Snacks.picker()
-end)
-vim.keymap.set("n", "<leader>po", function()
-    Snacks.picker.zoxide()
-end)
-vim.keymap.set("n", "<leader>pg", function()
-    Snacks.picker.grep()
-end)
-vim.keymap.set("n", "<leader>pe", function()
-    Snacks.picker.explorer({ ignored = true, hidden = true })
-end)
-vim.keymap.set("n", "<leader>pu", function()
-    Snacks.picker.undo()
-end)
-vim.keymap.set("n", "<leader>pd", function()
-    Snacks.picker.git_diff({ focus = "list" })
-end)
-vim.keymap.set("n", "gd", function()
-    Snacks.picker.lsp_definitions()
-end)
-vim.keymap.set("n", "grr", function()
-    Snacks.picker.lsp_references()
-end)
-vim.keymap.set("n", "giw", function()
-    local word = vim.fn.expand("<cword>")
-    local ok = pcall(function()
-        Snacks.picker.grep({
-            search = word,
-        })
-    end)
-    if not ok then
-        Snacks.notify("Failed to grep word")
-    end
-end)
 
 require("nvim-treesitter").setup({
     auto_install = true,
