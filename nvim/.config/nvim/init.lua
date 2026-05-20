@@ -325,6 +325,12 @@ require("snacks").setup({
         formatters = { file = { filename_first = true } },
         sources = {
             zoxide = {
+                transform = function(item)
+                    if item.file == vim.uv.cwd() then
+                        return false
+                    end
+                    return item
+                end,
                 layout = {
                     preview = false,
                     preset = "select",
