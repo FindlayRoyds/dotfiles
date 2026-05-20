@@ -13,151 +13,21 @@ vim.opt.signcolumn = "yes" -- Show diagnostics to left of line numbers, always h
 vim.opt.shortmess:append("I") -- Hide slpash screen stuff
 vim.opt.wrap = false -- Stop lines wrapping
 vim.opt.updatetime = 250 -- Decrease update time after stopping typing for linters, diagnostics, etc
--- vim.opt.timeoutlen = 750 -- Decrease mapped sequence wait time
 vim.g.have_nerd_font = true
 vim.opt.inccommand = "split" -- Preview substitutions while typing
 vim.opt.swapfile = false -- Don't need swap files for recovery, use git etc
 vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,t:ver25" -- Line cursor in terminal mode
 vim.opt.undolevels = 2000 -- Longer undo history
-
-local target_height = 49
-local poll_interval = 10000
-local timer = vim.uv.new_timer()
-if timer ~= nil then
-    timer:start(0, poll_interval, function()
-        vim.schedule(function()
-            if vim.o.lines ~= target_height then
-                Snacks.notify.warn("Press f11 to go fullscreen")
-            end
-        end)
-    end)
-end
-
--- Don't continue comments onto newlines
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "*",
-    callback = function()
-        vim.opt_local.formatoptions:remove({ "c", "r", "o" })
-    end,
-})
-
--- Relative line numbers
-vim.opt.number = true
-vim.opt.relativenumber = true
-
--- Ignore case when searching
-vim.opt.ignorecase = true
+vim.opt.number = true -- Hybrid line numbers
+vim.opt.relativenumber = true -- Relative line numbers
+vim.opt.ignorecase = true -- Ignore case when searching
 vim.opt.smartcase = true -- Uses case when typing capital letter
-
--- Enable global autoread to update buffer to match file
-vim.opt.autoread = true
--- Trigger checktime when focusing Neovim or entering a buffer
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
-    pattern = "*",
-    callback = function()
-        if vim.fn.getcmdwintype() == "" then
-            vim.cmd("checktime")
-        end
-    end,
-})
-
--- Highlight line and line number of active window
-local cursorline_group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
-vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
-    group = cursorline_group,
-    callback = function()
-        vim.opt_local.cursorline = true
-    end,
-})
-vim.api.nvim_create_autocmd({ "WinLeave" }, {
-    group = cursorline_group,
-    callback = function()
-        vim.opt_local.cursorline = false
-    end,
-})
-
--- Enter insert mode when switching to / opening a terminal
-vim.api.nvim_create_autocmd({ "WinEnter", "TermOpen" }, {
-    group = vim.api.nvim_create_augroup("TerminalAutoInsert", { clear = true }),
-    callback = function()
-        if vim.bo.buftype == "terminal" then
-            vim.cmd("startinsert!")
-        end
-    end,
-})
-
--- Highlight text being yanked
-vim.api.nvim_create_autocmd("TextYankPost", {
-    group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
-    callback = function()
-        vim.hl.on_yank()
-    end,
-})
+vim.opt.autoread = true -- Enable global autoread to update buffer to match file
 
 vim.diagnostic.config({
     severity_sort = true, -- Prioritise showing E>W>H diagnostics
     underline = { severity = { min = vim.diagnostic.severity.WARN } },
     jump = { float = true },
-})
-
--- Close toggle term sessions when changing working dir
-vim.api.nvim_create_autocmd("DirChanged", {
-    callback = function()
-        local ok, toggleterm = pcall(require, "toggleterm.terminal")
-        if ok then
-            local terminals = toggleterm.get_all()
-            for _, term in ipairs(terminals) do
-                term:shutdown()
-            end
-        end
-    end,
-})
-
--- Open zoxide picker when opening nvim in ~
-vim.api.nvim_create_autocmd("VimEnter", {
-    callback = function()
-        -- Ensure no files were passed as arguments and CWD is home
-        if vim.fn.argc() == 0 and vim.fn.getcwd() == vim.fn.expand("~") then
-            -- vim.schedule prevents UI conflicts by waiting for Neovim to initialize
-            vim.schedule(function()
-                Snacks.picker.zoxide()
-            end)
-        end
-    end,
-})
-
--- Auto-save files (e.g. rename variable in file not open in buffer)
-local default_apply_edit_handler = vim.lsp.handlers["textDocument/rename"]
-vim.lsp.handlers["textDocument/rename"] = function(err, workspace_edit, ctx, config)
-    local res = default_apply_edit_handler(err, workspace_edit, ctx, config)
-    vim.cmd("silent! wa")
-
-    return res
-end
-
-vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-    group = vim.api.nvim_create_augroup("AsymmetricScroll", { clear = true }),
-    callback = function()
-        local win_id = vim.api.nvim_get_current_win()
-        if vim.wo[win_id].wrap then
-            return
-        end
-
-        local win_info = vim.fn.getwininfo(win_id)[1]
-        local effective_width = win_info.width - win_info.textoff
-        local cursor_col = vim.fn.virtcol(".")
-        local view = vim.fn.winsaveview()
-
-        -- When to scroll to the left (half width of window)
-        local left_scroll_trigger = math.floor(effective_width / 2)
-
-        local target_leftcol = math.max(0, cursor_col - (effective_width - left_scroll_trigger))
-
-        if view.leftcol > target_leftcol then
-            view.leftcol = target_leftcol
-            vim.fn.winrestview(view)
-        end
-    end,
 })
 
 -- =====================================================================
@@ -222,16 +92,6 @@ end)
 -- PACKAGES
 -- =====================================================================
 
--- PackChanged is not a real event, not that it matters, nvim-treesitter is archived :(
--- vim.api.nvim_create_autocmd("PackChanged", {
---     callback = function(event)
---         -- Trigger TSUpdate automatically when nvim-treesitter updates or installs
---         if event.data.kind == "update" and event.data.spec.name == "nvim-treesitter" then
---             pcall(vim.cmd, "TSUpdate")
---         end
---     end,
--- })
-
 vim.pack.add({
     -- Dependencies
     "https://github.com/MunifTanjim/nui.nvim",
@@ -247,10 +107,7 @@ vim.pack.add({
     "https://github.com/okuuva/auto-save.nvim",
     "https://github.com/windwp/nvim-autopairs",
     "https://github.com/folke/snacks.nvim",
-    {
-        src = "https://github.com/mrcjkb/rustaceanvim",
-        version = vim.version.range("^9"),
-    },
+    { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("^9") },
     "https://github.com/neovim/nvim-lspconfig",
     "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/rmagatti/auto-session",
@@ -469,7 +326,7 @@ vim.lsp.config("lua_ls", {
                 version = "LuaJIT",
             },
             diagnostics = {
-                globals = { "vim", "Snacks" },
+                globals = { "vim" },
             },
             workspace = {
                 library = {
@@ -533,6 +390,134 @@ require("nvim-autopairs").setup()
 
 require("cutlass").setup({
     cut_key = "m",
+})
+
+-- =====================================================================
+-- AUTOCOMMANDS
+-- =====================================================================
+
+local bad_height = 45
+local poll_interval = 10000
+local timer = vim.uv.new_timer()
+if timer ~= nil then
+    timer:start(0, poll_interval, function()
+        vim.schedule(function()
+            if vim.o.lines == bad_height then
+                Snacks.notify.warn("Press f11 to go fullscreen")
+            end
+        end)
+    end)
+end
+
+-- Don't continue comments onto newlines
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "*",
+    callback = function()
+        vim.opt_local.formatoptions:remove({ "c", "r", "o" })
+    end,
+})
+
+-- Trigger checktime when focusing Neovim or entering a buffer
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+    pattern = "*",
+    callback = function()
+        if vim.fn.getcmdwintype() == "" then
+            vim.cmd("checktime")
+        end
+    end,
+})
+
+-- Highlight line and line number of active window
+local cursorline_group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
+vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
+    group = cursorline_group,
+    callback = function()
+        vim.opt_local.cursorline = true
+    end,
+})
+vim.api.nvim_create_autocmd({ "WinLeave" }, {
+    group = cursorline_group,
+    callback = function()
+        vim.opt_local.cursorline = false
+    end,
+})
+
+-- Enter insert mode when switching to / opening a terminal
+vim.api.nvim_create_autocmd({ "WinEnter", "TermOpen" }, {
+    group = vim.api.nvim_create_augroup("TerminalAutoInsert", { clear = true }),
+    callback = function()
+        if vim.bo.buftype == "terminal" then
+            vim.cmd("startinsert!")
+        end
+    end,
+})
+
+-- Highlight text being yanked
+vim.api.nvim_create_autocmd("TextYankPost", {
+    group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
+    callback = function()
+        vim.hl.on_yank()
+    end,
+})
+
+-- Close toggle term sessions when changing working dir
+vim.api.nvim_create_autocmd("DirChanged", {
+    callback = function()
+        local ok, toggleterm = pcall(require, "toggleterm.terminal")
+        if ok then
+            local terminals = toggleterm.get_all()
+            for _, term in ipairs(terminals) do
+                term:shutdown()
+            end
+        end
+    end,
+})
+
+-- Open zoxide picker when opening nvim in ~
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        -- Ensure no files were passed as arguments and CWD is home
+        if vim.fn.argc() == 0 and vim.fn.getcwd() == vim.fn.expand("~") then
+            -- vim.schedule prevents UI conflicts by waiting for Neovim to initialize
+            vim.schedule(function()
+                Snacks.picker.zoxide()
+            end)
+        end
+    end,
+})
+
+-- Auto-save files (e.g. rename variable in file not open in buffer)
+local default_apply_edit_handler = vim.lsp.handlers["textDocument/rename"]
+vim.lsp.handlers["textDocument/rename"] = function(err, workspace_edit, ctx, config)
+    local res = default_apply_edit_handler(err, workspace_edit, ctx, config)
+    vim.cmd("silent! wa")
+
+    return res
+end
+
+vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+    group = vim.api.nvim_create_augroup("AsymmetricScroll", { clear = true }),
+    callback = function()
+        local win_id = vim.api.nvim_get_current_win()
+        if vim.wo[win_id].wrap then
+            return
+        end
+
+        local win_info = vim.fn.getwininfo(win_id)[1]
+        local effective_width = win_info.width - win_info.textoff
+        local cursor_col = vim.fn.virtcol(".")
+        local view = vim.fn.winsaveview()
+
+        -- When to scroll to the left (half width of window)
+        local left_scroll_trigger = math.floor(effective_width / 2)
+
+        local target_leftcol = math.max(0, cursor_col - (effective_width - left_scroll_trigger))
+
+        if view.leftcol > target_leftcol then
+            view.leftcol = target_leftcol
+            vim.fn.winrestview(view)
+        end
+    end,
 })
 
 pcall(require, "local") -- Local config
