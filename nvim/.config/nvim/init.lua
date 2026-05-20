@@ -325,11 +325,37 @@ require("snacks").setup({
         formatters = { file = { filename_first = true } },
         sources = {
             zoxide = {
+                layout = {
+                    preview = false,
+                    layout = {
+                        width = 0.5,
+                    },
+                },
+                format = function(item)
+                    local path = item.file or item.text
+                    local dir_name = vim.fn.fnamemodify(path, ":t")
+                    -- Get the parent directory and shorten home to '~'
+                    local parent_path = vim.fn.fnamemodify(path, ":~:h")
+
+                    -- Handle edge case for root directory
+                    if dir_name == "" then
+                        dir_name = parent_path
+                        parent_path = ""
+                    end
+
+                    return {
+                        { "󰉋 ", "Directory" }, -- Folder icon
+                        { dir_name, "Directory" }, -- Highlighted directory name
+                        { "  " }, -- Spacing
+                        { parent_path, "SnacksPickerDir" }, -- Parent path only (without the dir itself)
+                    }
+                end,
                 -- Override the default confirm action so it doesn't open the file picker
                 confirm = function(picker, item)
                     picker:close()
                     if item and item.file then
                         vim.api.nvim_set_current_dir(item.file)
+                        vim.fn.jobstart({ "zoxide", "add", item.file })
                     end
                 end,
             },
@@ -349,7 +375,6 @@ require("snacks").setup({
         },
     },
 })
-
 vim.keymap.set("n", "<leader>p", "<Nop>") -- Prevent 'p' from pasting after timeout
 vim.keymap.set("n", "<leader>f", function() --                                          TODO remove at some point
     Snacks.notify.warn("The shortcut has been changed to space-p-f")
@@ -498,7 +523,7 @@ require("auto-save").setup({
 require("nvim-autopairs").setup()
 
 require("cutlass").setup({
-    cut_key = "m"
+    cut_key = "m",
 })
 
 pcall(require, "local") -- Local config
