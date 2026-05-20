@@ -327,8 +327,11 @@ require("snacks").setup({
             zoxide = {
                 layout = {
                     preview = false,
+                    preset = "select",
                     layout = {
-                        width = 0.5,
+                        backdrop = 60,
+                        height = 0.75,
+                        width = 0.4,
                     },
                 },
                 format = function(item)
