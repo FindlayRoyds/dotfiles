@@ -93,27 +93,31 @@ end)
 -- =====================================================================
 
 vim.pack.add({
-    -- Dependencies
-    "https://github.com/MunifTanjim/nui.nvim",
-    "https://github.com/nvim-lua/plenary.nvim",
-
+    -- LSP / AST
+    "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/williamboman/mason.nvim",
     "https://github.com/williamboman/mason-lspconfig.nvim",
-    { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
-    "https://github.com/NMAC427/guess-indent.nvim",
-    "https://github.com/lewis6991/gitsigns.nvim",
-    "https://github.com/kylechui/nvim-surround",
-    "https://github.com/akinsho/toggleterm.nvim",
-    "https://github.com/okuuva/auto-save.nvim",
-    "https://github.com/windwp/nvim-autopairs",
-    "https://github.com/folke/snacks.nvim",
-    { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("^9") },
     "https://github.com/neovim/nvim-lspconfig",
-    "https://github.com/nvim-treesitter/nvim-treesitter",
-    "https://github.com/rmagatti/auto-session",
-    "https://github.com/nvim-lualine/lualine.nvim",
-    "https://github.com/gbprod/cutlass.nvim",
+    { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("^9") },
 
+    -- Git integration
+    "https://github.com/lewis6991/gitsigns.nvim",
+
+    -- Large plugins / visual changes
+    "https://github.com/folke/snacks.nvim",
+    "https://github.com/nvim-lualine/lualine.nvim",
+    "https://github.com/akinsho/toggleterm.nvim",
+    { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
+
+    -- Small QOL behavior changes
+    "https://github.com/kylechui/nvim-surround",
+    "https://github.com/gbprod/cutlass.nvim",
+    "https://github.com/NMAC427/guess-indent.nvim",
+    "https://github.com/windwp/nvim-autopairs",
+    "https://github.com/okuuva/auto-save.nvim",
+    "https://github.com/rmagatti/auto-session",
+
+    -- Themes
     "https://github.com/catppuccin/nvim",
     "https://github.com/ellisonleao/gruvbox.nvim",
     "https://github.com/folke/tokyonight.nvim",
