@@ -13,6 +13,10 @@
       "src": "https://github.com/saghen/blink.cmp",
       "version": "1.0.0 - 2.0.0"
     },
+    "cutlass.nvim": {
+      "rev": "d01b5c1943050fcda8edf5c89d4419c41a65890e",
+      "src": "https://github.com/gbprod/cutlass.nvim"
+    },
     "focus.nvim": {
       "rev": "36ebedeebe82ebea250c9d671769194caa033902",
       "src": "https://github.com/nvim-focus/focus.nvim"

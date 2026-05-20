@@ -255,6 +255,7 @@ vim.pack.add({
     "https://github.com/nvim-treesitter/nvim-treesitter",
     "https://github.com/rmagatti/auto-session",
     "https://github.com/nvim-lualine/lualine.nvim",
+    "https://github.com/gbprod/cutlass.nvim",
 
     "https://github.com/catppuccin/nvim",
     "https://github.com/ellisonleao/gruvbox.nvim",
@@ -495,5 +496,9 @@ require("auto-save").setup({
 })
 
 require("nvim-autopairs").setup()
+
+require("cutlass").setup({
+    cut_key = "m"
+})
 
 pcall(require, "local") -- Local config
