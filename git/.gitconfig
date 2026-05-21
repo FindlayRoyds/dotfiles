@@ -1,7 +1,7 @@
 [core]
 	editor = nvim
     pager = delta
-	excludesfile = /home/findlayr/.gitignore_global
+	excludesfile = ~/.gitignore_global
 
 [delta]
     side-by-side = true
