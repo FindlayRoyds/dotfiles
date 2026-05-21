@@ -364,15 +364,37 @@ require("guess-indent").setup({})
 
 require("nvim-surround").setup({})
 
+local toggleterm_backdrop = nil
 require("toggleterm").setup({
     open_mapping = nil,
     direction = "float",
     start_in_insert = true,
     persist_size = true,
     on_open = function(_)
+        vim.api.nvim_set_hl(0, "ToggleTermBackdrop", { bg = "#000000" })
+        local buf = vim.api.nvim_create_buf(false, true)
+        toggleterm_backdrop = vim.api.nvim_open_win(buf, false, {
+            relative = "editor",
+            row = 0,
+            col = 0,
+            width = vim.o.columns,
+            height = vim.o.lines,
+            style = "minimal",
+            border = "none",
+            focusable = false,
+            zindex = 49,
+        })
+        vim.wo[toggleterm_backdrop].winhighlight = "Normal:ToggleTermBackdrop"
+        vim.wo[toggleterm_backdrop].winblend = 60
         vim.schedule(function()
             vim.cmd("startinsert!")
         end)
+    end,
+    on_close = function(_)
+        if toggleterm_backdrop and vim.api.nvim_win_is_valid(toggleterm_backdrop) then
+            vim.api.nvim_win_close(toggleterm_backdrop, true)
+            toggleterm_backdrop = nil
+        end
     end,
 })
 
