@@ -190,7 +190,9 @@ vim.pack.add({
 -- Before importing local config so it can be overridden
 require("gruvbox").setup({
     palette_overrides = {
-        bright_green = "#aaa3d2",
+        bright_green = "#96ab3f",
+        -- bright_aqua = "#fabd2f",
+        bright_aqua = "#83a598",
     },
     overrides = {
         SignColumn = { bg = "none" },
