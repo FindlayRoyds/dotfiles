@@ -32,8 +32,14 @@
 
 [core]
 	editor = nvim
+    pager = delta
 	excludesfiles = /home/findlayr/.gitignore_global
 	excludesfile = /home/findlayr/.gitignore_global
 
-[alias]
-    df = -c diff.external=difft diff
+[delta]
+    side-by-side = true
+    line-numbers = true
+    hunk-header-style = omit
+
+    syntax-theme = ansi
+    zero-style = normal
