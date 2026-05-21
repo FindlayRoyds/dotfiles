@@ -1,7 +1,7 @@
 brew "fzf"
 brew "zoxide"
 brew "ripgrep"
-brew "difftastic"
+brew "git-delta"
 brew "fish"
 brew "neovim"
 brew "tree-sitter-cli"

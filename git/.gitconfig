@@ -1,0 +1,15 @@
+[core]
+	editor = nvim
+    pager = delta
+	excludesfile = /home/findlayr/.gitignore_global
+
+[delta]
+    side-by-side = true
+    line-numbers = true
+    hunk-header-style = omit
+
+    syntax-theme = ansi
+    zero-style = normal
+
+[include]
+    path = ~/.gitconfig.local
