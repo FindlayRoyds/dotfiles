@@ -30,6 +30,13 @@ vim.diagnostic.config({
     jump = { float = true },
 })
 
+-- Ensure homebrew bin is on PATH (needed for tools like tree-sitter)
+for _, brew_bin in ipairs({ "/opt/homebrew/bin", "/usr/local/bin", "/home/linuxbrew/.linuxbrew/bin" }) do
+    if vim.fn.isdirectory(brew_bin) == 1 and not vim.env.PATH:find(brew_bin, 1, true) then
+        vim.env.PATH = brew_bin .. ":" .. vim.env.PATH
+    end
+end
+
 -- =====================================================================
 -- KEYBINDS
 -- =====================================================================
@@ -150,7 +157,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
 
 vim.pack.add({
     -- LSP / AST
-    "https://github.com/nvim-treesitter/nvim-treesitter",
+    "https://github.com/romus204/tree-sitter-manager.nvim",
     "https://github.com/williamboman/mason.nvim",
     "https://github.com/williamboman/mason-lspconfig.nvim",
     "https://github.com/neovim/nvim-lspconfig",
@@ -291,13 +298,9 @@ require("snacks").setup({
     },
 })
 
-require("nvim-treesitter").setup({
+require("tree-sitter-manager").setup({
     auto_install = true,
-    highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-    },
-    indent = { enable = true },
+    highlight = true,
 })
 
 require("mason").setup()

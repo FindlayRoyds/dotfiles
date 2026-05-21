@@ -5,7 +5,7 @@
       "src": "https://github.com/okuuva/auto-save.nvim"
     },
     "auto-session": {
-      "rev": "daa7c996a0395e26342934843938647d0f1e87f4",
+      "rev": "e0f89f5d4e788d24d2188334cfa09b89b1cf92f1",
       "src": "https://github.com/rmagatti/auto-session"
     },
     "blink.cmp": {
@@ -61,10 +61,6 @@
       "rev": "2e93e154de9ff326def6480a4358bfc149d5da2c",
       "src": "https://github.com/kylechui/nvim-surround"
     },
-    "nvim-treesitter": {
-      "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
-      "src": "https://github.com/nvim-treesitter/nvim-treesitter"
-    },
     "rustaceanvim": {
       "rev": "a60811ae6054ba981cb4693aaecd715dea783327",
       "src": "https://github.com/mrcjkb/rustaceanvim",
@@ -81,6 +77,10 @@
     "tokyonight.nvim": {
       "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
       "src": "https://github.com/folke/tokyonight.nvim"
+    },
+    "tree-sitter-manager.nvim": {
+      "rev": "f18e545c6ccbbae9875e63a2a7b8e8a9678a242e",
+      "src": "https://github.com/romus204/tree-sitter-manager.nvim"
     }
   }
 }
