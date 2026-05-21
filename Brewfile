@@ -1,0 +1,6 @@
+brew "fzf"
+brew "zoxide"
+brew "ripgrep"
+brew "difftastic"
+brew "fish"
+brew "neovim"

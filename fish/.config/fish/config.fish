@@ -1,5 +1,8 @@
-if test -x /opt/homebrew/bin/brew
-    eval (/opt/homebrew/bin/brew shellenv)
+for _brew in /opt/homebrew/bin/brew /usr/local/bin/brew /home/linuxbrew/.linuxbrew/bin/brew
+    if test -x $_brew
+        eval ($_brew shellenv)
+        break
+    end
 end
 
 if status is-interactive
