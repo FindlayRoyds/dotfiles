@@ -116,6 +116,10 @@ vim.keymap.set("n", "grd", function()
     vim.diagnostic.open_float()
 end)
 
+-- Leap
+vim.keymap.set({ 'n', 'x', 'o' }, 's', '<Plug>(leap)')
+vim.keymap.set('n',               'S', '<Plug>(leap-from-window)')
+
 -- Terminal
 vim.keymap.set("n", "<leader>t", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
 -- Vibe coded function to immediately send esc in terminal (e.g., for when in vim inside nvim terminal)
@@ -180,6 +184,7 @@ vim.pack.add({
     "https://github.com/windwp/nvim-autopairs",
     "https://github.com/okuuva/auto-save.nvim",
     "https://github.com/rmagatti/auto-session",
+    "https://codeberg.org/andyg/leap.nvim",
 
     -- Themes
     "https://github.com/catppuccin/nvim",
