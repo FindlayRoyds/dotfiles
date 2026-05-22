@@ -370,6 +370,9 @@ require("toggleterm").setup({
     direction = "float",
     start_in_insert = true,
     persist_size = true,
+    float_opts = {
+        border = "rounded",
+    },
     on_open = function(_)
         vim.api.nvim_set_hl(0, "ToggleTermBackdrop", { bg = "#000000" })
         local buf = vim.api.nvim_create_buf(false, true)
