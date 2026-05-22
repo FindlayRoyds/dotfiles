@@ -5,11 +5,13 @@
 
 [delta]
     side-by-side = true
-    line-numbers = true
     hunk-header-style = omit
-
     syntax-theme = ansi
     zero-style = normal
+    file-style = bold brightwhite
+    file-decoration-style = "#444444" ul ol
+    line-numbers-left-style = "#444444"
+    line-numbers-right-style = "#444444"
 
 [include]
     path = ~/.gitconfig.local
