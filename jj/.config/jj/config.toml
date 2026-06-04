@@ -6,7 +6,3 @@ default-command = "log"
 [aliases]
 tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@"]
 tug- = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
-
-[user]
-name = "Findlay Royds"
-email = "findlay.royds@alliedtelesis.co.nz"

@@ -22,4 +22,6 @@ if status is-interactive
 
     set -gx EDITOR nvim # Open nvim as editor
     set -gx VISUAL nvim # Open nvim as editor
+
+    set -gx JJ_CONFIG ~/.config/jj/
 end
