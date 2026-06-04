@@ -24,6 +24,18 @@ vim.opt.ignorecase = true -- Ignore case when searching
 vim.opt.smartcase = true -- Uses case when typing capital letter
 vim.opt.autoread = true -- Enable global autoread to update buffer to match file
 
+vim.g.clipboard = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+  },
+  paste = {
+    ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+  },
+}
+
 vim.diagnostic.config({
     severity_sort = true, -- Prioritise showing E>W>H diagnostics
     underline = { severity = { min = vim.diagnostic.severity.WARN } },
