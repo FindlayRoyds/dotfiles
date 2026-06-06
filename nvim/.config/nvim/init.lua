@@ -177,7 +177,6 @@ vim.pack.add({
     "https://github.com/williamboman/mason.nvim",
     "https://github.com/williamboman/mason-lspconfig.nvim",
     "https://github.com/neovim/nvim-lspconfig",
-    { src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("^9") },
 
     -- Git integration
     "https://github.com/lewis6991/gitsigns.nvim",
