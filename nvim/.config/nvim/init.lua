@@ -117,8 +117,8 @@ vim.keymap.set("n", "grd", function()
 end)
 
 -- Leap
-vim.keymap.set({ 'n', 'x', 'o' }, 's', '<Plug>(leap)')
-vim.keymap.set('n',               'S', '<Plug>(leap-from-window)')
+vim.keymap.set({ 'n', 'x', 'o' }, ',', '<Plug>(leap)')
+-- vim.keymap.set('n',               'S', '<Plug>(leap-from-window)')
 
 -- Terminal
 vim.keymap.set("n", "<leader>t", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
