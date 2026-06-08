@@ -323,7 +323,7 @@ require("tree-sitter-manager").setup({
 
 require("mason").setup()
 require("mason-lspconfig").setup({
-    ensure_installed = { "ruff", "ty", "stylua", "taplo", "clangd", "lua_ls" },
+    ensure_installed = { "ruff", "ty", "stylua", "taplo", "clangd", "lua_ls", "ts_ls" },
 })
 vim.lsp.config("ty", { autostart = true })
 vim.lsp.enable("ty")
@@ -346,6 +346,10 @@ vim.lsp.config("clangd", {
     autostart = true,
 })
 vim.lsp.enable("clangd")
+vim.lsp.config("ts_ls", {
+    autostart = true,
+})
+vim.lsp.enable("ts_ls")
 vim.lsp.config("lua_ls", {
     autostart = true,
     settings = {
