@@ -1,0 +1,31 @@
+[merge]
+    tool = kdiff3
+
+[init]
+    defaultBranch = master
+
+[stgit]
+    smtpserver = int-smtp.atlnz.lc
+
+    # Interactive two/three-way merge tool. It is executed by the
+    # 'resolved --interactive' command
+    imerger = kdiff3 \"%(ancestor)s\" \"%(current)s\" \"%(patched)s\"
+    i3merge = kdiff3 \"%(ancestor)s\" \"%(current)s\" \"%(patched)s\"
+    i2merge = kdiff3 \"%(current)s\" \"%(patched)s\"
+
+    # Automatically invoke the interactive merger in case of conflicts
+    autoimerge = yes
+	sender = Findlay Royds <findlay.royds@alliedtelesis.co.nz>
+
+[push]
+    default = simple
+
+[status]
+	submodulesummary = true
+
+[user]
+	name = Findlay Royds
+	email = findlay.royds@alliedtelesis.co.nz
+
+[color]
+	ui = auto

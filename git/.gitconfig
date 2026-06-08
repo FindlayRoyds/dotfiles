@@ -15,8 +15,3 @@
 
 [include]
     path = ~/.gitconfig.local
-[user]
-	name = Ryan Scofield
-	email = ryan.scofield@alliedtelesis.co.nz
-[stgit]
-	sender = Ryan Scofield <ryan.scofield@alliedtelesis.co.nz>
