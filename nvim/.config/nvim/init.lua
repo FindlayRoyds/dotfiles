@@ -117,7 +117,8 @@ vim.keymap.set("n", "grd", function()
 end)
 
 -- Leap
-vim.keymap.set({ 'n', 'x', 'o' }, ',', '<Plug>(leap)')
+vim.keymap.set({ "n", "x", "o" }, ",", "<Plug>(leap)")
+vim.keymap.set("v", "p", "P", { noremap = true, silent = true }) -- Prevent visual paste from overwriting the unnamed register
 -- vim.keymap.set('n',               'S', '<Plug>(leap-from-window)')
 
 -- Terminal
