@@ -82,7 +82,7 @@ vim.keymap.set("n", "<leader>pg", function()
     Snacks.picker.grep()
 end)
 vim.keymap.set("n", "<leader>pe", function()
-    Snacks.picker.explorer({ ignored = true, hidden = true })
+    require("oil").open()
 end)
 vim.keymap.set("n", "<leader>pu", function()
     Snacks.picker.undo()
@@ -186,6 +186,7 @@ vim.pack.add({
     "https://github.com/okuuva/auto-save.nvim",
     "https://github.com/rmagatti/auto-session",
     "https://codeberg.org/andyg/leap.nvim",
+    "https://github.com/stevearc/oil.nvim",
 
     -- Themes
     "https://github.com/catppuccin/nvim",
@@ -417,8 +418,9 @@ require("auto-save").setup({
         local fn = vim.fn
         local utils = require("auto-save.utils.data")
         local buf_name = vim.api.nvim_buf_get_name(buf)
+        local filetype = vim.api.nvim_get_option_value("filetype", { buf = buf })
 
-        if buf_name ~= "" and fn.filereadable(buf_name) == 0 then
+        if filetype ~= "oil" and buf_name ~= "" and fn.filereadable(buf_name) == 0 then
             Snacks.notify.warn("File missing: auto-save aborted", { title = "Auto-save" })
             return false
         end
@@ -437,6 +439,13 @@ require("nvim-autopairs").setup()
 
 require("cutlass").setup({
     cut_key = "m",
+})
+
+require("oil").setup({
+    view_options = {
+        -- Show files and directories that start with "."
+        show_hidden = true,
+    },
 })
 
 require("git-conflict").setup({})
