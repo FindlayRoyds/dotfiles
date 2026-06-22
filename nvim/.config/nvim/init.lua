@@ -462,19 +462,6 @@ require("git-conflict").setup({})
 -- AUTOCOMMANDS
 -- =====================================================================
 
-local bad_height = 45
-local poll_interval = 10000
-local timer = vim.uv.new_timer()
-if timer ~= nil then
-    timer:start(0, poll_interval, function()
-        vim.schedule(function()
-            if vim.o.lines == bad_height then
-                Snacks.notify.warn("Press f11 to go fullscreen")
-            end
-        end)
-    end)
-end
-
 -- Don't continue comments onto newlines
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "*",
