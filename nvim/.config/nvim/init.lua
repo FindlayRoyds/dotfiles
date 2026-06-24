@@ -70,15 +70,24 @@ end)
 -- Snacks pickers
 vim.keymap.set("n", "<leader>p", "<Nop>") -- Prevent 'p' from pasting after timeout
 vim.keymap.set("n", "<leader>pf", function()
-    local current_file = vim.api.nvim_buf_get_name(0)
-    Snacks.picker.smart({
-        filter = {
-            cwd = true,
-            filter = function(item)
-                return item.file ~= current_file
-            end,
-        },
-    })
+  local open_files = {}
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) then
+      local name = vim.api.nvim_buf_get_name(buf)
+      if name ~= "" then
+        open_files[name] = true
+      end
+    end
+  end
+
+  Snacks.picker.smart({
+    filter = {
+      cwd = true,
+      filter = function(item, _)
+        return not open_files[item.file]
+      end,
+    },
+  })
 end)
 vim.keymap.set("n", "<leader>pp", function()
     Snacks.picker()
