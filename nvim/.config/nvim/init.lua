@@ -459,10 +459,31 @@ require("cutlass").setup({
 })
 
 require("oil").setup({
-    view_options = {
-        -- Show files and directories that start with "."
-        show_hidden = true,
+    watch_for_changes = true, -- Watch for changes from the filesystem
+    lsp_file_methods = {
+        autosave_changes = true, -- Update LSP stuff on change idk
     },
+    view_options = {
+        show_hidden = true, -- Show hidden files
+    },
+})
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "oil",
+    callback = function(args)
+        vim.keymap.set({ "n", "x", "o" }, ",", function()
+            require("leap").leap({
+                opts = {
+                    vim_opts = {
+                        ["wo.conceallevel"] = 3,
+                        ["wo.concealcursor"] = "nvic",
+                    },
+                },
+            })
+        end, {
+            buffer = args.buf,
+            desc = "Leap without revealing Oil IDs",
+        })
+    end,
 })
 
 require("git-conflict").setup({})
