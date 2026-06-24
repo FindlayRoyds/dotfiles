@@ -470,12 +470,9 @@ require("oil").setup({
 })
 
 require("flash").setup({
-    label = {
-        current = false, -- Don't bother with a label for closest match
-    },
     highlight = {
         backdrop = false,
-    }
+    },
 })
 vim.keymap.set({ "n", "x", "o" }, ",", function()
     require("flash").jump()
