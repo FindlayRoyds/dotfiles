@@ -478,6 +478,8 @@ vim.keymap.set({ "n", "x", "o" }, ",", function()
     require("flash").jump()
 end)
 vim.api.nvim_set_hl(0, "FlashMatch", { link = "Visual" })
+vim.api.nvim_set_hl(0, "FlashLabel", { link = "IncSearch" })
+vim.api.nvim_set_hl(0, "FlashCurrent", { link = "Search" })
 
 require("git-conflict").setup({})
 
