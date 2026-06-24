@@ -134,8 +134,8 @@ vim.keymap.set("n", "grd", function()
 end)
 
 -- Leap
-vim.keymap.set({ "n", "x", "o" }, ",", "<Plug>(leap)")
-vim.keymap.set("v", "p", "P", { noremap = true, silent = true }) -- Prevent visual paste from overwriting the unnamed register
+-- vim.keymap.set({ "n", "x", "o" }, ",", "<Plug>(leap)")
+-- vim.keymap.set("v", "p", "P", { noremap = true, silent = true }) -- Prevent visual paste from overwriting the unnamed register
 -- vim.keymap.set('n',               'S', '<Plug>(leap-from-window)')
 
 -- Terminal
@@ -202,8 +202,9 @@ vim.pack.add({
     "https://github.com/windwp/nvim-autopairs",
     "https://github.com/okuuva/auto-save.nvim",
     "https://github.com/rmagatti/auto-session",
-    "https://codeberg.org/andyg/leap.nvim",
-    "https://github.com/stevearc/oil.nvim",
+    -- "https://codeberg.org/andyg/leap.nvim",
+    "https://github.com/folke/flash.nvim",
+    "https://github.com/barrettruth/canola.nvim",
 
     -- Themes
     "https://github.com/catppuccin/nvim",
@@ -467,24 +468,19 @@ require("oil").setup({
         show_hidden = true, -- Show hidden files
     },
 })
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "oil",
-    callback = function(args)
-        vim.keymap.set({ "n", "x", "o" }, ",", function()
-            require("leap").leap({
-                opts = {
-                    vim_opts = {
-                        ["wo.conceallevel"] = 3,
-                        ["wo.concealcursor"] = "nvic",
-                    },
-                },
-            })
-        end, {
-            buffer = args.buf,
-            desc = "Leap without revealing Oil IDs",
-        })
-    end,
+
+require("flash").setup({
+    label = {
+        current = false, -- Don't bother with a label for closest match
+    },
+    highlight = {
+        backdrop = false,
+    }
 })
+vim.keymap.set({ "n", "x", "o" }, ",", function()
+    require("flash").jump()
+end)
+vim.api.nvim_set_hl(0, "FlashMatch", { link = "Visual" })
 
 require("git-conflict").setup({})
 
