@@ -496,7 +496,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- Trigger checktime when focusing Neovim or entering a buffer
-vim.api.nvim_create_autocmd({ "FocusGained" }, {
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
     pattern = "*",
     callback = function()
         if vim.fn.getcmdwintype() == "" then
