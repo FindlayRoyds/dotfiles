@@ -1,1 +1,7 @@
 .jj
+.clangd
+compile_commands.json
+.agents/
+.claude/skills/
+mcp.log
+skills-lock.json
