@@ -6,7 +6,6 @@ vim.opt.mouse = "" -- Disable mouse
 vim.opt.cmdheight = 0 -- Hide command bar when not in use
 vim.opt.undofile = true -- Persistent undo history
 vim.opt.scrolloff = 10 -- Vertical padding
-vim.opt.sidescrolloff = 24 -- Horizontal padding
 vim.opt.splitright = true -- Open vertical splits to the right
 vim.opt.splitbelow = true -- Open horizontal splits below
 vim.opt.signcolumn = "yes" -- Show diagnostics to left of line numbers, always have space
@@ -576,24 +575,41 @@ end
 vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
     group = vim.api.nvim_create_augroup("AsymmetricScroll", { clear = true }),
     callback = function()
+        if vim.bo.buftype == "terminal" then
+            return
+        end
         local win_id = vim.api.nvim_get_current_win()
         if vim.wo[win_id].wrap then
             return
         end
 
+        local right_scrolloff = 24
+
         local win_info = vim.fn.getwininfo(win_id)[1]
-        local effective_width = win_info.width - win_info.textoff
+        -- Width available for buffer text.
+        -- textoff accounts for number/sign/fold columns.
+        local text_width = win_info.width - win_info.textoff
+        -- Keep this many columns free on the right.
+        local effective_width = math.max(1, text_width - right_scrolloff)
         local cursor_col = vim.fn.virtcol(".")
         local view = vim.fn.winsaveview()
 
-        -- When to scroll to the left (half width of window)
+        -- Scroll left when cursor is too far left.
+        -- This keeps the cursor around halfway into the visible area.
         local left_scroll_trigger = math.floor(effective_width / 2)
-
         local target_leftcol = math.max(0, cursor_col - (effective_width - left_scroll_trigger))
-
         if view.leftcol > target_leftcol then
             view.leftcol = target_leftcol
             vim.fn.winrestview(view)
+            return
+        end
+
+        -- Scroll right when cursor passes the effective right edge.
+        local right_edge = view.leftcol + effective_width
+        if cursor_col > right_edge then
+            view.leftcol = cursor_col - effective_width
+            vim.fn.winrestview(view)
+            return
         end
     end,
 })
