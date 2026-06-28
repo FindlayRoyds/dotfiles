@@ -434,22 +434,22 @@ require("auto-save").setup({
     enabled = true,
     condition = function(buf)
         local fn = vim.fn
-        local utils = require("auto-save.utils.data")
         local buf_name = vim.api.nvim_buf_get_name(buf)
         local filetype = vim.api.nvim_get_option_value("filetype", { buf = buf })
 
-        if filetype ~= "oil" and buf_name ~= "" and fn.filereadable(buf_name) == 0 then
+        -- Don't save these
+        if buf_name == "" then return false end
+        if filetype == "oil" then return false end
+        if filetype == "gitcommit" or filetype == "gitrebase" then return false end
+        if fn.getbufvar(buf, "&modifiable") == 0 then return false end
+
+        -- Warn if file has gone missing, but don't save
+        if fn.filereadable(buf_name) == 0 then
             Snacks.notify.warn("File missing: auto-save aborted", { title = "Auto-save" })
             return false
         end
 
-        if
-            fn.getbufvar(buf, "&modifiable") == 1
-            and utils.not_in(fn.getbufvar(buf, "&filetype"), { "gitcommit", "gitrebase" })
-        then
-            return true
-        end
-        return false
+        return true
     end,
 })
 
