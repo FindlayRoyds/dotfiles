@@ -25,3 +25,7 @@ if status is-interactive
 
     set -gx JJ_CONFIG ~/.config/jj/
 end
+
+
+# Added by Antigravity CLI installer
+set -gx PATH "/Users/findlay/.local/bin" $PATH

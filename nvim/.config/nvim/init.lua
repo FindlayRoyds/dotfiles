@@ -243,7 +243,13 @@ require("lualine").setup({
         lualine_a = {},
         lualine_b = {},
         lualine_c = { "filename" },
-        lualine_x = { "diff", "diagnostics" },
+        lualine_x = {
+            function()
+                return vim.lsp.status() ~= "" and "LSP running" or ""
+            end,
+            "diff",
+            "diagnostics",
+        },
         lualine_y = {},
         lualine_z = {},
     },
@@ -331,7 +337,7 @@ require("tree-sitter-manager").setup({
 
 require("mason").setup()
 require("mason-lspconfig").setup({
-    ensure_installed = { "ruff", "ty", "stylua", "taplo", "clangd", "lua_ls", "ts_ls" },
+    ensure_installed = { "ruff", "ty", "stylua", "taplo", "clangd", "lua_ls", "ts_ls", "kotlin_language_server" },
 })
 vim.lsp.config("ty", { autostart = true })
 vim.lsp.enable("ty")
@@ -379,6 +385,13 @@ vim.lsp.config("lua_ls", {
     },
 })
 vim.lsp.enable("lua_ls")
+vim.lsp.config("kotlin_language_server", {
+    cmd = { "env", "JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home", "kotlin-language-server" },
+    init_options = {
+        storagePath = vim.fn.stdpath("cache") .. "/kotlin-language-server",
+    },
+})
+vim.lsp.enable("kotlin_language_server")
 
 require("blink.cmp").setup({
     keymap = { preset = "super-tab" },
@@ -437,10 +450,18 @@ require("auto-save").setup({
         local filetype = vim.api.nvim_get_option_value("filetype", { buf = buf })
 
         -- Don't save these
-        if buf_name == "" then return false end
-        if filetype == "oil" then return false end
-        if filetype == "gitcommit" or filetype == "gitrebase" then return false end
-        if fn.getbufvar(buf, "&modifiable") == 0 then return false end
+        if buf_name == "" then
+            return false
+        end
+        if filetype == "oil" then
+            return false
+        end
+        if filetype == "gitcommit" or filetype == "gitrebase" then
+            return false
+        end
+        if fn.getbufvar(buf, "&modifiable") == 0 then
+            return false
+        end
 
         -- Warn if file has gone missing, but don't save
         if fn.filereadable(buf_name) == 0 then
