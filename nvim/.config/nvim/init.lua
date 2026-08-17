@@ -489,6 +489,17 @@ require("oil").setup({
     },
 })
 
+-- Oil sets bufhidden = "wipe" by default, which deletes the buffer as soon as
+-- you navigate away, invalidating any jumplist entry pointing at it. Keep the
+-- buffer around so oil directories stay reachable via <C-o>/<C-i>.
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "oil",
+    group = vim.api.nvim_create_augroup("oil-jumplist", { clear = true }),
+    callback = function()
+        vim.bo.bufhidden = "hide"
+    end,
+})
+
 require("flash").setup({
     highlight = {
         backdrop = false,
