@@ -2,3 +2,6 @@
 
 [ui]
 default-command = "log"
+
+[aliases]
+review = ["util", "exec", "--", "jj-review-gerrit"]
