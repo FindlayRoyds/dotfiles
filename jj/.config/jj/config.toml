@@ -2,6 +2,8 @@
 
 [ui]
 default-command = "log"
+pager = "delta"
+diff-formatter = ":git"
 
 [aliases]
 review = ["util", "exec", "--", "jj-review-gerrit"]
