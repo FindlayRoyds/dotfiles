@@ -5,6 +5,9 @@ for _brew in /opt/homebrew/bin/brew /usr/local/bin/brew /home/linuxbrew/.linuxbr
     end
 end
 
+set -gx PYENV_ROOT $HOME/.pyenv
+pyenv init - fish | source
+
 if status is-interactive
     set fish_greeting # no more welcome message
 
