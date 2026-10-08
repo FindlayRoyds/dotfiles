@@ -522,6 +522,27 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
     end,
 })
 
+-- Hide the cursor while the terminal is unfocused
+local hide_cursor_group = vim.api.nvim_create_augroup("HideCursorOnFocusLost", { clear = true })
+local saved_guicursor
+vim.api.nvim_create_autocmd("FocusLost", {
+    group = hide_cursor_group,
+    callback = function()
+        -- Set here, not once at startup, so a :colorscheme change can't wipe it
+        vim.api.nvim_set_hl(0, "HiddenCursor", { blend = 100, nocombine = true })
+        saved_guicursor = vim.o.guicursor
+        vim.o.guicursor = "a:HiddenCursor"
+    end,
+})
+vim.api.nvim_create_autocmd("FocusGained", {
+    group = hide_cursor_group,
+    callback = function()
+        if saved_guicursor then
+            vim.o.guicursor = saved_guicursor
+        end
+    end,
+})
+
 -- Highlight line and line number of active window
 local cursorline_group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
 vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
