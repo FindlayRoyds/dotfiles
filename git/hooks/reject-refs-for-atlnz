@@ -1,0 +1,15 @@
+#!/bin/sh
+# pre-push: refuse refs/for/* (Gerrit review) pushes to git.atlnz.lc.
+# $1 = remote name, $2 = remote URL
+# stdin = "<local ref> <local sha> <remote ref> <remote sha>" per ref
+case "$2" in
+  *git.atlnz.lc*)
+    while read -r local_ref local_sha remote_ref remote_sha; do
+      case "$remote_ref" in
+        refs/for/*)
+          echo "pre-push: refusing to push $remote_ref to $2 (use the gerrit remote)" >&2
+          exit 1 ;;
+      esac
+    done ;;
+esac
+exit 0

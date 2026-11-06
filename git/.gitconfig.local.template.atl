@@ -29,3 +29,9 @@
 
 [color]
 	ui = auto
+
+# Config-based hook (git >= 2.54): runs alongside each repo's .git/hooks
+# instead of replacing them like core.hooksPath would.
+[hook "reject-refs-for-atlnz"]
+    event = pre-push
+    command = ~/dotfiles/git/hooks/reject-refs-for-atlnz
