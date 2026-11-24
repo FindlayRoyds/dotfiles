@@ -10,3 +10,4 @@ brew "helix"
 brew "npm"
 brew "xclip" if OS.linux? # System clipboard provider for neovim (macOS uses built-in pbcopy)
 brew "pyenv"
+brew "zellij"
