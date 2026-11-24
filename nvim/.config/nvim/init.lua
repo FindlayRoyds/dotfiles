@@ -15,7 +15,6 @@ vim.opt.updatetime = 250 -- Decrease update time after stopping typing for linte
 vim.g.have_nerd_font = true
 vim.opt.inccommand = "split" -- Preview substitutions while typing
 vim.opt.swapfile = false -- Don't need swap files for recovery, use git etc
-vim.opt.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,t:ver25" -- Line cursor in terminal mode
 vim.opt.undolevels = 2000 -- Longer undo history
 vim.opt.number = true -- Hybrid line numbers
 vim.opt.relativenumber = true -- Relative line numbers
@@ -518,27 +517,6 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
     callback = function()
         if vim.fn.getcmdwintype() == "" then
             vim.cmd("checktime")
-        end
-    end,
-})
-
--- Hide the cursor while the terminal is unfocused
-local hide_cursor_group = vim.api.nvim_create_augroup("HideCursorOnFocusLost", { clear = true })
-local saved_guicursor
-vim.api.nvim_create_autocmd("FocusLost", {
-    group = hide_cursor_group,
-    callback = function()
-        -- Set here, not once at startup, so a :colorscheme change can't wipe it
-        vim.api.nvim_set_hl(0, "HiddenCursor", { blend = 100, nocombine = true })
-        saved_guicursor = vim.o.guicursor
-        vim.o.guicursor = "a:HiddenCursor"
-    end,
-})
-vim.api.nvim_create_autocmd("FocusGained", {
-    group = hide_cursor_group,
-    callback = function()
-        if saved_guicursor then
-            vim.o.guicursor = saved_guicursor
         end
     end,
 })
