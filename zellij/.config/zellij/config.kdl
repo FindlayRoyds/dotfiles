@@ -1,3 +1,15 @@
+keybinds preset="default" {
+    session {
+        // Floating would also unhide the floating panes, so open it in its own tab
+        bind "w" {
+            NewTab {
+                name "sessions"
+                layout "session-manager"
+            };
+            SwitchToMode "Normal"
+        }
+    }
+}
 
 // Plugin aliases - can be used to change the implementation of Zellij
 // changing these requires a restart to take effect

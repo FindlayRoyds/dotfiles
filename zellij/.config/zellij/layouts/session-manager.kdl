@@ -1,0 +1,7 @@
+// Session manager on its own in a tab, used by the session mode "w" binding.
+// The plugin closes itself on Esc or after switching session, which closes the tab.
+layout {
+    pane borderless=true {
+        plugin location="session-manager"
+    }
+}
