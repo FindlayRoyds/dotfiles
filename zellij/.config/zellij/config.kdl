@@ -510,3 +510,16 @@ pane_frame_style "titles"
 pane_frames false
 scrollback_editor "nvim"
 mouse_mode false
+terminal {
+    ligatures false
+}
+attention {
+    tray_icon false
+    tray_badge {
+        needs_you true
+        failed true
+        done true
+        working true
+    }
+}
+show_startup_tips false
