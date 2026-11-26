@@ -161,27 +161,9 @@ vim.pack.add({
     "https://github.com/rmagatti/auto-session",
     "https://github.com/folke/flash.nvim",
     "https://github.com/barrettruth/canola.nvim",
-
-    -- Themes
-    "https://github.com/catppuccin/nvim",
-    "https://github.com/ellisonleao/gruvbox.nvim",
-    "https://github.com/folke/tokyonight.nvim",
 })
 
--- Before importing local config so it can be overridden
-require("gruvbox").setup({
-    palette_overrides = {
-        bright_green = "#96ab3f",
-        -- bright_aqua = "#fabd2f",
-        bright_aqua = "#83a598",
-    },
-    overrides = {
-        SignColumn = { bg = "none" },
-        CursorLineSign = { bg = "none" },
-        CursorLineNr = { bg = "none" },
-    },
-})
-vim.cmd.colorscheme("gruvbox")
+vim.cmd.colorscheme("default") -- Built-in theme, near-black background
 
 require("auto-session").setup({
     suppressed_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
