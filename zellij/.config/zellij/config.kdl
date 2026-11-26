@@ -1,4 +1,13 @@
 keybinds preset="default" {
+    scroll {
+        // Keep the pane's colours in the scrollback opened in the editor
+        bind "e" {
+            EditScrollback {
+                ansi true
+            };
+            SwitchToMode "Normal"
+        }
+    }
     session {
         // Floating would also unhide the floating panes, so open it in its own tab
         bind "w" {
@@ -508,7 +517,7 @@ web_client {
 // mode_hints_when_bars_hidden false
 pane_frame_style "titles"
 pane_frames false
-scrollback_editor "nvim"
+scrollback_editor "zellij-scrollback-editor"
 mouse_mode false
 terminal {
     ligatures false

@@ -1,0 +1,42 @@
+#!/bin/sh
+# Zellij scrollback editor: show the dumped scrollback in nvim with its colours
+# and the cursor on the last non-blank line.
+#
+# Zellij dumps the scrollback with ANSI colour codes (EditScrollback ansi=true),
+# so instead of editing the file as text, render it in a process-less nvim
+# terminal buffer, which interprets the codes.
+
+# Zellij's environment may not have Homebrew on PATH, so fall back to it.
+PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/opt/homebrew/bin:/usr/local/bin"
+
+exec nvim "$@" -c 'lua (function()
+  local path = vim.fn.expand("%:p")
+  local lines = vim.fn.readfile(path)
+  -- Drop the empty viewport rows at the end of the dump.
+  local function blank(l)
+    return l:gsub("\27%[[%d;:]*%a", ""):match("^%s*$") ~= nil
+  end
+  while #lines > 0 and blank(lines[#lines]) do
+    table.remove(lines)
+  end
+
+  local dump = vim.api.nvim_get_current_buf()
+  local buf = vim.api.nvim_create_buf(true, false)
+  vim.bo[buf].scrollback = 100000
+  vim.api.nvim_win_set_buf(0, buf)
+  vim.api.nvim_buf_delete(dump, { force = true })
+  vim.wo.number = false
+  vim.wo.relativenumber = false
+  vim.wo.signcolumn = "no"
+  vim.wo.foldcolumn = "0"
+
+  local chan = vim.api.nvim_open_term(buf, {})
+  vim.api.nvim_chan_send(chan, table.concat(lines, "\r\n"))
+
+  -- The terminal processes output asynchronously; jump to the end once it has.
+  vim.defer_fn(function()
+    local last = vim.fn.prevnonblank(vim.fn.line("$"))
+    vim.api.nvim_win_set_cursor(0, { math.max(last, 1), 0 })
+    vim.cmd("normal! zb")
+  end, 50)
+end)()'
