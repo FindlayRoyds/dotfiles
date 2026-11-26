@@ -131,41 +131,6 @@ vim.keymap.set("n", "grd", function()
     vim.diagnostic.open_float()
 end)
 
--- Terminal
-vim.keymap.set("n", "<leader>t", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
--- Vibe coded function to immediately send esc in terminal (e.g., for when in vim inside nvim terminal)
-vim.api.nvim_create_autocmd("TermOpen", {
-    group = vim.api.nvim_create_augroup("custom-terminal-config", { clear = true }),
-    callback = function(args)
-        local buf = args.buf
-
-        vim.keymap.set("t", "<Esc>", function()
-            -- vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { buffer = 0, desc = "Exit terminal mode" })
-            local term_id = vim.b[buf].terminal_job_id
-
-            if vim.b[buf].esc_timer then
-                -- Second <Esc> pressed within the timeout window
-                vim.b[buf].esc_timer = false
-                local termcodes = vim.api.nvim_replace_termcodes("<C-\\><C-n>", true, false, true)
-                vim.api.nvim_feedkeys(termcodes, "n", false)
-            else
-                -- First <Esc> pressed: start timer and send raw Esc immediately
-                vim.b[buf].esc_timer = true
-
-                if term_id then
-                    vim.api.nvim_chan_send(term_id, "\27") -- Send raw Escape byte
-                end
-
-                vim.defer_fn(function()
-                    if vim.api.nvim_buf_is_valid(buf) then
-                        vim.b[buf].esc_timer = false
-                    end
-                end, vim.o.timeoutlen) -- Uses your standard Neovim timeoutlen
-            end
-        end, { buffer = buf, desc = "Immediate Esc or double Esc to exit" })
-    end,
-})
-
 -- =====================================================================
 -- PACKAGES
 -- =====================================================================
@@ -185,7 +150,6 @@ vim.pack.add({
     -- Large plugins / visual changes
     "https://github.com/folke/snacks.nvim",
     "https://github.com/nvim-lualine/lualine.nvim",
-    "https://github.com/akinsho/toggleterm.nvim",
     { src = "https://github.com/saghen/blink.cmp", version = vim.version.range("1.*") },
 
     -- Small QOL behavior changes
@@ -398,43 +362,6 @@ require("guess-indent").setup({})
 
 require("nvim-surround").setup({})
 
-local toggleterm_backdrop = nil
-require("toggleterm").setup({
-    open_mapping = nil,
-    direction = "float",
-    start_in_insert = true,
-    persist_size = true,
-    float_opts = {
-        border = "rounded",
-    },
-    on_open = function(_)
-        vim.api.nvim_set_hl(0, "ToggleTermBackdrop", { bg = "#000000" })
-        local buf = vim.api.nvim_create_buf(false, true)
-        toggleterm_backdrop = vim.api.nvim_open_win(buf, false, {
-            relative = "editor",
-            row = 0,
-            col = 0,
-            width = vim.o.columns,
-            height = vim.o.lines,
-            style = "minimal",
-            border = "none",
-            focusable = false,
-            zindex = 49,
-        })
-        vim.wo[toggleterm_backdrop].winhighlight = "Normal:ToggleTermBackdrop"
-        vim.wo[toggleterm_backdrop].winblend = 60
-        vim.schedule(function()
-            vim.cmd("startinsert!")
-        end)
-    end,
-    on_close = function(_)
-        if toggleterm_backdrop and vim.api.nvim_win_is_valid(toggleterm_backdrop) then
-            vim.api.nvim_win_close(toggleterm_backdrop, true)
-            toggleterm_backdrop = nil
-        end
-    end,
-})
-
 require("auto-save").setup({
     enabled = true,
     condition = function(buf)
@@ -536,34 +463,11 @@ vim.api.nvim_create_autocmd({ "WinLeave" }, {
     end,
 })
 
--- Enter insert mode when switching to / opening a terminal
-vim.api.nvim_create_autocmd({ "WinEnter", "TermOpen" }, {
-    group = vim.api.nvim_create_augroup("TerminalAutoInsert", { clear = true }),
-    callback = function()
-        if vim.bo.buftype == "terminal" then
-            vim.cmd("startinsert!")
-        end
-    end,
-})
-
 -- Highlight text being yanked
 vim.api.nvim_create_autocmd("TextYankPost", {
     group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
     callback = function()
         vim.hl.on_yank()
-    end,
-})
-
--- Close toggle term sessions when changing working dir
-vim.api.nvim_create_autocmd("DirChanged", {
-    callback = function()
-        local ok, toggleterm = pcall(require, "toggleterm.terminal")
-        if ok then
-            local terminals = toggleterm.get_all()
-            for _, term in ipairs(terminals) do
-                term:shutdown()
-            end
-        end
     end,
 })
 
