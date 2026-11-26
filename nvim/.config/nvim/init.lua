@@ -376,7 +376,7 @@ require("auto-save").setup({
         if filetype == "oil" then
             return false
         end
-        if filetype == "gitcommit" or filetype == "gitrebase" then
+        if filetype == "gitcommit" or filetype == "gitrebase" or filetype == "jjdescription" then
             return false
         end
         if fn.getbufvar(buf, "&modifiable") == 0 then
